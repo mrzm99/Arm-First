@@ -51,7 +51,7 @@ SECTIONS
     {
         . = ALIGN(4);
         __sbss = .;
-        __estakc = __sbss + 0x400;
+        __estack = __sbss + 0x400;
         *(.bss*)
         . = ALIGN(4);
         __ebss = .;

@@ -3,7 +3,7 @@
  *  @file   start.s
  *  @date   2025.04.xx
  *  @author mrzm99
- *  @brief  
+ *  @brief
  *  @note
  */
  /*--------------------------------------------------------------------------------------*/
@@ -12,7 +12,7 @@
     .cpu cortex-m4
     .thumb
 
-    .global main
+    .global system_init
     .global invalid_handlr
     .global reset_handlr
 
@@ -20,7 +20,7 @@
 /*! @brief  vector table
  */
     .section .isr_vector
-    .word   __estakc                @ Initial SP value
+    .word   __estack                @ Initial SP value
     .word   reset_handlr            @ Reset
     .word   invalid_handlr          @ NMI
     .word   invalid_handlr          @ Hard fault
@@ -43,13 +43,11 @@
  */
     .type reset_handlr, %function
 reset_handlr:
-    ldr     r0, =__estakc   @ set stack pointer
+    ldr     r0, =__estack       @ set stack pointer
     mov     sp, r0
-    mov     r1, #0x55
-    mov     r2, #0xAA
-    mov     r3, #0x55
-    mov     r4, #0xAA
-    bl       main            @ never return
+    mov     r0, #0              @ initialize PSR register
+    msr     APSR_nzcvq, r0
+    b       system_init         @ never return
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  default handler
