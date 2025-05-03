@@ -24,7 +24,7 @@ MEMORY
 /*! Section definition
  */
 SECTIONS
-{   
+{
     /* program and read-only data */
     .text :
     {
@@ -36,6 +36,22 @@ SECTIONS
         __etext = .;
     } > FLASH
 
+        /* bss section */
+    .bss :
+    {
+        . = ALIGN(4);
+        __sbss = .;
+        . = __sbss + 0x400;
+        . = ALIGN(4);
+        __estack = .;
+        . = ALIGN(128);
+        *(.vect_tbl_on_ram)
+        . = ALIGN(4);
+        *(.bss*)
+        . = ALIGN(4);
+        __ebss = .;
+    } > RAM
+
     /* data section */
     .data :
     {
@@ -45,17 +61,5 @@ SECTIONS
         . = ALIGN(4);
         __edata = .;
     } > RAM AT > FLASH
-
-    /* bss section */
-    .bss :
-    {
-        . = ALIGN(4);
-        __sbss = .;
-        __estack = __sbss + 0x400;
-        *(.bss*)
-        . = ALIGN(4);
-        __ebss = .;
-        _estack = __ebss; /* workaround for undefined symbol error */
-    } > RAM
 }
 

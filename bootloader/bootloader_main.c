@@ -11,12 +11,13 @@
 #include <stdint.h>
 #include "iodefine.h"
 #include "utility.h"
+#include "int_hdlr.h"
 
-extern uint32_t __etext;    // end of text section
-extern uint32_t __sdata;    // top of data section
-extern uint32_t __edata;    // end of data section
-extern uint32_t __sbss;     // top of bss section
-extern uint32_t __ebss;     // end of bss section
+extern void *__etext;    // end of text section
+extern void *__sdata;    // top of data section
+extern void *__edata;    // end of data section
+extern void *__sbss;     // top of bss section
+extern void *__ebss;     // end of bss section
 extern void main(void);     // application main
 
 /*--------------------------------------------------------------------------------------*/
@@ -29,17 +30,17 @@ static void section_init(void)
     char *p_val;
 
     // clear bss section to 0
-    p_top = (char *)__sbss;
-    p_end = (char *)__ebss;
+    p_top = (char *)&__sbss;
+    p_end = (char *)&__ebss; 
     while (p_top < p_end) {
         *p_top = 0;
         p_top++;
     }
 
     // initialize data section
-    p_top = (char *)__sdata;
-    p_end = (char *)__edata;
-    p_val = (char *)__etext;
+    p_top = (char *)&__sdata;
+    p_end = (char *)&__edata;
+    p_val = (char *)&__etext;
     while (p_top < p_end) {
         *p_top = *p_val;
         p_top++;
@@ -91,12 +92,17 @@ void system_init(void)
     // init clock
     clock_init();
 
+    // init MPU
+
+    // init vecter table on RAM
+    init_vecttbl();
+
+    // enable interrupt
+
     // debug
     while (1) {
         busy_wait(40 * 1000 * 1000);
     }
-
-    // enable interrupt
 
     // jump to application main
     main();

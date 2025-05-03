@@ -12,8 +12,15 @@
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  register base address
  */
+#define SCB                 (0xE000ED00U)
 #define FLASH_INTERFACE     (0x40023C00U)
 #define RCC                 (0x40023800U)
+
+/*--------------------------------------------------------------------------------------*/
+/*! @brief  register offset of SCB (System Contorol Block)
+ */
+
+ #define VTOR                   (0x08U)
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  register offset of FLASH INTERFACE
