@@ -63,6 +63,7 @@ static void clock_init(void)
     // PLLSAI:on|PLLI2S:on|PLL:on|Clock security:on|HSE bypassed|HSE:on|HSI:on
     val = (1<<26)|(1<<24)|(1<<19)|(1<<18)|(1<<16)|(1<<0);
     set_word(RCC, RCC_CR, val);
+    //set_word(RCC, RCC_CR, 0x05050001);
     while (1){
         if ((get_word(RCC, RCC_CR)&(1<<25)) == 0) {
             break;
@@ -72,6 +73,7 @@ static void clock_init(void)
     // System clock = PLL
     val = (3<<27)|(3<<24)|(3<<13)|(4<<10)|(2<<0);
     set_word(RCC, RCC_CFGR, val);
+    //set_word(RCC, RCC_CFGR, 0x00109492);
 }
 
 /*--------------------------------------------------------------------------------------*/
@@ -82,11 +84,11 @@ void system_init(void)
     // init section
     section_init();
 
-    // data/instruction cach reset
+    // flash data/instruction cach reset
     set_word(FLASH_INTERFACE, FLASH_ACR, 0x00001800);
-    // cancell data/instruction cach reset
+    // flash cancell data/instruction cach reset
     set_word(FLASH_INTERFACE, FLASH_ACR, 0x00000000);
-    // data/instruction cach enable / set access latency = 5 for SYSTEM CLOCK(160MHz)
+    // flash data/instruction cach enable / set access latency = 5 for SYSTEM CLOCK(160MHz)
     set_word(FLASH_INTERFACE, FLASH_ACR, 0x00000705);
 
     // init clock
