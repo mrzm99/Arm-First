@@ -53,27 +53,34 @@ static void section_init(void)
  */
 static void clock_init(void)
 {
-    uint32_t val;
+    // PLLin(HSI)=16MHz, PLLN=40, PLLM=2, PLLP=2, PLLQ=8
+    // f(vco)= PLLin * (PLLN/PLLM) = 320MHz
+    // f(pll out)= f(vco) / PLLP = 160MHz
+    // f(usb otg, fs, sdio, rng)= f(vco) / PLLQ = 40MHz
+    set_word(RCC, RCC_PLLCFGR, 0x08000282);
+    // PLLSAI:on|PLLI2S:on|PLL:on|Clock security:off|HSE bypassed|HSE:on|HSI:on
+    set_word(RCC, RCC_CR, 0x05010001);
 
-    val = (2<<28)|(2<<6);
-    set_word(RCC, RCC_PLLI2SCFGR, val);
-    // PLLout=160MHz, PLLsource=HSI
-    val = (4<<24)|(0<<22)|(0<<16)|(40<<6)|(2<<0);
-    set_word(RCC, RCC_PLLCFGR, val);
-    // PLLSAI:on|PLLI2S:on|PLL:on|Clock security:on|HSE bypassed|HSE:on|HSI:on
-    val = (1<<26)|(1<<24)|(1<<19)|(1<<18)|(1<<16)|(1<<0);
-    set_word(RCC, RCC_CR, val);
-    //set_word(RCC, RCC_CR, 0x05050001);
-    while (1){
-        if ((get_word(RCC, RCC_CR)&(1<<25)) == 0) {
-            break;
-        }
-    }
+    // System clock = PLL = 160MHz
+    // AHB = system clock / 1 = 160MHz
+    // APB1 = AHB / 4 = 40MHz
+    // APB2 = AHB / 2 = 80MHz
+    // RTC = HSE / 16 = 1MHz
+    set_word(RCC, RCC_CFGR, 0xA4109402);
 
-    // System clock = PLL
-    val = (3<<27)|(3<<24)|(3<<13)|(4<<10)|(2<<0);
-    set_word(RCC, RCC_CFGR, val);
-    //set_word(RCC, RCC_CFGR, 0x00109492);
+    // USB OTG / Ether / DMA2 / DMA1 / CCM and RAM / SRAM/ CRC enable
+    // IO port I,H,G,F,E,D,C,B,A enable
+    set_word(RCC, RCC_AHB1ENR, 0x7E7411FF);
+    // Flexible static memory controller module clock enable
+    set_word(RCC, RCC_AHB3ENR, 0x00000001);
+    // I2C1,2,3,4 / UART2,3,4,5 / SPI2,3 / TIM14,13,12,7,6,5,4,3,2
+    set_word(RCC, RCC_APB1ENR, 0x00FEC1FF);
+    // TIM11,10,9 / System configuration controller / SPI1 / SDIO / USART6,1 / TIM8,1
+    set_word(RCC, RCC_APB2ENR, 0x00075833);
+    // RTC clock enable
+    set_word(RCC, RCC_BDCR, 0x00008000);
+
+
 }
 
 /*--------------------------------------------------------------------------------------*/
