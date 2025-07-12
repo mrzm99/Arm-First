@@ -108,11 +108,6 @@ void system_init(void)
 
     // enable interrupt
 
-    // debug
-    while (1) {
-        busy_wait(40 * 1000 * 1000);
-    }
-
     // jump to application main
     main();
 }

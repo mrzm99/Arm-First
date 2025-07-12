@@ -7,7 +7,8 @@
  *  @note
  */
 /*--------------------------------------------------------------------------------------*/
-
+#ifndef __IO_DEFINE_H__
+#define __IO_DEFINE_H__
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  register base address
@@ -15,6 +16,8 @@
 #define SCB                 (0xE000ED00U)
 #define FLASH_INTERFACE     (0x40023C00U)
 #define RCC                 (0x40023800U)
+#define GPIOA               (0x40020000U)
+#define GPIOB               (0x40020400U)
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  register offset of SCB (System Contorol Block)
@@ -54,3 +57,19 @@
 #define RCC_CSR                 (0x74U)
 #define RCC_SSCGR               (0x80U)
 #define RCC_PLLI2SCFGR          (0x84U)
+
+/*--------------------------------------------------------------------------------------*/
+/*! @brief GPIO offset  
+ */
+#define GPIOx_MODER             (0x00U)
+#define GPIOx_OTYEPR            (0x04U)
+#define GPIOx_OSPEEDR           (0x08U)
+#define GPIOx_PUPDR             (0x0CU)
+#define GPIOx_IDR               (0x10U)
+#define GPIOx_ODR               (0x14U)
+#define GPIOx_BSRR              (0x18U)
+#define GPIOx_LCKR              (0x1CU)
+#define GPIOx_AFRL              (0x20U)
+#define GPIOx_AFRH              (0x24U)
+
+#endif

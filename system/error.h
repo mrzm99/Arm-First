@@ -1,16 +1,19 @@
 /*--------------------------------------------------------------------------------------*/
-/*!
- *  @file   system_define.h
- *  @date   2025.04.xx
+/*! 
+ *  @file   error.h
+ *  @date   2025.xx.xx
  *  @author mrzm99
  *  @brief
  *  @note
  */
 /*--------------------------------------------------------------------------------------*/
-#ifndef __SYSTEM_DEFINE_H__
-#define __SYSTEM_DEFINE_H__
+#ifndef __ERROR_H__
+#define __ERROR_H__
 
-// Sytem clock 160Mhz
-#define SYSTEM_CLOCK_FREQ   (160)
+#define ERR_OK      (0)
+#define ERR_PAR     (-10)
+
+
+
 
 #endif
