@@ -12,13 +12,13 @@
 #include "iodefine.h"
 #include "utility.h"
 #include "int_hdlr.h"
+#include "kernel.h"
 
 extern void *__etext;    // end of text section
 extern void *__sdata;    // top of data section
 extern void *__edata;    // end of data section
 extern void *__sbss;     // top of bss section
 extern void *__ebss;     // end of bss section
-extern void main(void);     // application main
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  Initialize Section
@@ -101,13 +101,9 @@ void system_init(void)
     // init clock
     clock_init();
 
-    // init MPU
-
     // init vecter table on RAM
     init_vecttbl();
 
-    // enable interrupt
-
-    // jump to application main
-    main();
+    // jump to kernel 
+    kernel_init();
 }

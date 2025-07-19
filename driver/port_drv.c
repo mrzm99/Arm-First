@@ -37,7 +37,7 @@ void port_drv_init(void)
 /*--------------------------------------------------------------------------------------*/
 /*! @brief
  */
-int32_t port_drv_set_pin(uint32_t port_no, uint32_t mode, uint32_t init_val, uint32_t otype, uint32_t speed, uint32_t pull_up_down)
+int32_t port_drv_set_pin_func(uint32_t port_no, uint32_t mode, uint32_t init_val, uint32_t otype, uint32_t speed, uint32_t pull_up_down)
 {
     uint32_t pno = get_pno(port_no);
     uint32_t bno = get_bno(port_no);
@@ -95,7 +95,7 @@ int32_t port_drv_set_pin(uint32_t port_no, uint32_t mode, uint32_t init_val, uin
 /*--------------------------------------------------------------------------------------*/
 /*! @brief
  */
-int32_t port_drv_set_output(uint32_t port_no, uint32_t lvl)
+int32_t port_drv_set_pin_lvl(uint32_t port_no, uint32_t lvl)
 {
     uint32_t pno = get_pno(port_no);
     uint32_t bno = get_bno(port_no);
@@ -110,12 +110,14 @@ int32_t port_drv_set_output(uint32_t port_no, uint32_t lvl)
 
     // set port output level
     set_hword(base_reg_addr[pno], GPIOx_ODR, lvl<<bno);
+
+    return ERR_OK;
 }
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief
  */
-int32_t port_drv_get_intput(uint32_t port_no)
+int32_t port_drv_get_pin_lvl(uint32_t port_no)
 {
     uint32_t pno = get_pno(port_no);
     uint32_t bno = get_bno(port_no);
@@ -135,7 +137,7 @@ int32_t port_drv_get_intput(uint32_t port_no)
 /*--------------------------------------------------------------------------------------*/
 /*! @brief
  */
-int32_t port_drv_set_output_no_rmw(uint32_t port_no, uint32_t lvl)
+int32_t port_drv_set_pin_lvl_no_rmw(uint32_t port_no, uint32_t lvl)
 {
     // No read-modify-write access
 }

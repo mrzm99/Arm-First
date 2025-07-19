@@ -14,10 +14,17 @@
 /*! @brief  register base address
  */
 #define SCB                 (0xE000ED00U)
+#define STK_CTRL            (0xE000E010U)
+#define STK_LOAD            (0xE000E014U)
+#define STK_VAL             (0xE000E018U)
+#define STK_CALIB           (0xE000E01CU)
 #define FLASH_INTERFACE     (0x40023C00U)
 #define RCC                 (0x40023800U)
 #define GPIOA               (0x40020000U)
 #define GPIOB               (0x40020400U)
+#define SHPR1               (0xE000ED18U)
+#define SHPR2               (0xE000ED1CU)
+#define SHPR3               (0xE000ED20U)
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  register offset of SCB (System Contorol Block)
@@ -57,6 +64,59 @@
 #define RCC_CSR                 (0x74U)
 #define RCC_SSCGR               (0x80U)
 #define RCC_PLLI2SCFGR          (0x84U)
+
+/*--------------------------------------------------------------------------------------*/
+/*! @brief NVIC 
+ */
+#define NVIC_ISER0              (0xE000E100U)
+#define NVIC_ISER1              (0xE000E104U)
+#define NVIC_ISER2              (0xE000E108U)
+#define NVIC_ISER3              (0xE000E10CU)
+#define NVIC_ISER4              (0xE000E110U)
+#define NVIC_ISER5              (0xE000E114U)
+#define NVIC_ISER6              (0xE000E118U)
+#define NVIC_ISER7              (0xE000E11CU)
+
+#define NVIC_ICER0              (0xE000E180U)
+#define NVIC_ICER1              (0xE000E184U)
+#define NVIC_ICER2              (0xE000E188U)
+#define NVIC_ICER3              (0xE000E18CU)
+#define NVIC_ICER4              (0xE000E190U)
+#define NVIC_ICER5              (0xE000E194U)
+#define NVIC_ICER6              (0xE000E198U)
+#define NVIC_ICER7              (0xE000E19CU)
+
+#define NVIC_ISPR0              (0xE000E200U)
+#define NVIC_ISPR1              (0xE000E204U)
+#define NVIC_ISPR2              (0xE000E208U)
+#define NVIC_ISPR3              (0xE000E20CU)
+#define NVIC_ISPR4              (0xE000E210U)
+#define NVIC_ISPR5              (0xE000E214U)
+#define NVIC_ISPR6              (0xE000E218U)
+#define NVIC_ISPR7              (0xE000E21CU)
+
+#define NVIC_ICPR0              (0xE000E280U)
+#define NVIC_ICPR1              (0xE000E284U)
+#define NVIC_ICPR2              (0xE000E288U)
+#define NVIC_ICPR3              (0xE000E28CU)
+#define NVIC_ICPR4              (0xE000E290U)
+#define NVIC_ICPR5              (0xE000E294U)
+#define NVIC_ICRP6              (0xE000E298U)
+#define NVIC_ICRP7              (0xE000E29CU)
+
+#define NVIC_IABP0              (0xE000E300U)
+#define NVIC_IABP1              (0xE000E304U)
+#define NVIC_IABP2              (0xE000E308U)
+#define NVIC_IABP3              (0xE000E30CU)
+#define NVIC_IABP4              (0xE000E310U)
+#define NVIC_IABP5              (0xE000E314U)
+#define NVIC_IABP6              (0xE000E318U)
+#define NVIC_IABP7              (0xE000E31CU)
+
+#define NVIC_IPR_BASE           (0xE000E400U)
+
+#define NVIC_STIR               (0xE000EF00U)
+
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief GPIO offset  

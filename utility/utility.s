@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------------------------*/
 /*! 
- *  @file   utility.h
+ *  @file   utility.s 
  *  @date   2025.05.xx
  *  @author mrzm99
  *  @brief
@@ -12,6 +12,7 @@
     .thumb
 
     .global busy_wait
+    .global int_ena
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  wait routine
@@ -21,4 +22,20 @@
 busy_wait:
     subs    r0, #1
     bne     busy_wait
+    bx      lr
+
+/*--------------------------------------------------------------------------------------*/
+/*! @brief  enable interrupt
+ */
+    .type int_ena, %function
+int_ena:
+    CPSIE   i
+    bx      lr
+
+/*--------------------------------------------------------------------------------------*/
+/*! @brief disable interrupt 
+ */
+    .type int_dis, %function
+int_dis:
+    CPSID   i
     bx      lr

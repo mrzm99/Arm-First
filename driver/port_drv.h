@@ -85,10 +85,10 @@
  */
 #include <stdint.h>
 void port_drv_init(void);
-int32_t port_drv_set_pin(uint32_t port_no, uint32_t mode, uint32_t init_val, uint32_t otype, uint32_t speed, uint32_t pull_up_down);
-int32_t port_drv_set_output(uint32_t port_no, uint32_t lvl);
-int32_t port_drv_get_input(uint32_t port_no);
-int32_t port_drv_set_output_no_rmw(uint32_t port_no, uint32_t lvl);
+int32_t port_drv_set_pin_func(uint32_t port_no, uint32_t mode, uint32_t init_val, uint32_t otype, uint32_t speed, uint32_t pull_up_down);
+int32_t port_drv_set_pin_lvl(uint32_t port_no, uint32_t lvl);
+int32_t port_drv_get_pin_lvl(uint32_t port_no);
+int32_t port_drv_set_pin_lvl_no_rmw(uint32_t port_no, uint32_t lvl);
 
 
 #endif
