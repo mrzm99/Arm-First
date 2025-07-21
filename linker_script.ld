@@ -16,7 +16,7 @@ ENTRY(reset_handlr)
  */
 MEMORY
 {
-    RAM     (rwx)   : ORIGIN = 0x20000000, LENGTH = 192K    /* 192KB RAM */
+    RAM     (rwx)   : ORIGIN = 0x20000000, LENGTH = 128K    /* 128KB RAM */
     FLASH   (rx)    : ORIGIN = 0x08000000, LENGTH = 1024K   /* 1MB Flash memory */
 }
 
@@ -36,7 +36,7 @@ SECTIONS
         __etext = .;
     } > FLASH
 
-        /* bss section */
+    /* bss section */
     .bss :
     {
         . = ALIGN(4);
@@ -61,5 +61,8 @@ SECTIONS
         . = ALIGN(4);
         __edata = .;
     } > RAM AT > FLASH
+    
+    /* RAM end */
+    __ram_end = 0x20000000 + 0x00020000;
 }
 

@@ -23,6 +23,8 @@
  #define set_bit(base, offset, bit)     (*((volatile uint32_t *)(base + offset)) |= (1<<(bit)))
  #define clr_bit(base, offset, bit)     (*((volatile uint32_t *)(base + offset)) &= (~(1<<bit)))
 
+#define align(s, n)     ((s + (n-1)) & ~(n-1))
+
 extern void busy_wait(uint32_t cnt);
 extern void int_ena(void);
 extern void int_dis(void);
