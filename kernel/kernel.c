@@ -32,7 +32,8 @@ void kernel_init(void)
     systick_init();
 
     int_ena();
-    port_drv_set_pin_func(PORTB4, PORTB4_OUTPUT, PORT_LVL_HIGH, 0, 0, 0);
+    //port_drv_set_pin_func(PORTB4, PORTB4_OUTPUT, PORT_LVL_HIGH, 0, 0, 0);
+    systick_init();
     systick_start(SYSTICK_CLK_AHB_DIV_8, AHB_CLOCK_FREQ/8);
 
     // jump to application main

@@ -24,6 +24,8 @@ static void systick_handler(void)
     static int cnt = 0; // debug
     static int lvl = 0;
 
+    port_drv_set_pin_func(PORTA2, PORTA2_OUTPUT, PORT_LVL_HIGH, 0, 0, 0);
+    port_drv_set_pin_func(PORTA3, PORTA3_OUTPUT, PORT_LVL_HIGH, 0, 0, 0);
     if (++cnt >= 1000) {
         cnt = 0;
         if (lvl) {

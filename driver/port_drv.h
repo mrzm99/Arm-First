@@ -46,6 +46,8 @@
 #define get_pno(p)      (((p)>>8)&(0xFF))
 #define get_bno(p)      ((p)&(0x0FF)) 
 
+#define PORTA2          ((PORTA<<8)|(BIT2))
+#define PORTA3          ((PORTA<<8)|(BIT3))
 #define PORTA15         ((PORTA<<8)|(BIT15))
 #define PORTB4          ((PORTB<<8)|(BIT4))
 
@@ -61,16 +63,19 @@
 /*--------------------------------------------------------------------------------------*/
 /*! @brief alternate function 
  */
-#define get_mode(f)     (((f)>>8)&(0xFF))
-#define get_func(f)     ((f)&(0xFF))
+#define get_mode(f)         (((f)>>8)&(0xFF))
+#define get_func(f)         ((f)&(0xFF))
 
-#define PORTA15_INPUT      ((PORT_INPUT<<8)|(0x00))
-#define PORTA15_OUTPUT     ((PORT_OUTPUT<<8)|(0x00))
-#define PORTA15_ANALOG     ((PORT_ANALOG<<8)|(0x00))
+#define PORTA2_OUTPUT       ((PORT_OUTPUT<<8)|(0x00))
+#define PORTA3_OUTPUT       ((PORT_OUTPUT<<8)|(0x00))
 
-#define PORTB4_INPUT      ((PORT_INPUT<<8)|(0x00))
-#define PORTB4_OUTPUT     ((PORT_OUTPUT<<8)|(0x00))
-#define PORTB4_ANALOG     ((PORT_ANALOG<<8)|(0x00))
+#define PORTA15_INPUT       ((PORT_INPUT<<8)|(0x00))
+#define PORTA15_OUTPUT      ((PORT_OUTPUT<<8)|(0x00))
+#define PORTA15_ANALOG      ((PORT_ANALOG<<8)|(0x00))
+
+#define PORTB4_INPUT        ((PORT_INPUT<<8)|(0x00))
+#define PORTB4_OUTPUT       ((PORT_OUTPUT<<8)|(0x00))
+#define PORTB4_ANALOG       ((PORT_ANALOG<<8)|(0x00))
 
 
 /*--------------------------------------------------------------------------------------*/

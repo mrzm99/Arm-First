@@ -18,5 +18,6 @@
  */
 void app_main(void)
 {
+    port_drv_set_pin_func(PORTB4, PORTB4_OUTPUT, PORT_LVL_HIGH, 0, 0, 0);
     while (1); 
 }
