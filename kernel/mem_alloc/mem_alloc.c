@@ -94,7 +94,7 @@ void *mem_alloc(uint32_t size)
     uint8_t *p_mbk = this->p_top;
 
     // align size and add tag size
-    size = align(size, 4);
+    size = mem_align(size, 4);
     size += TAG_SIZE;
 
     while (p_mbk < this->p_end) {
