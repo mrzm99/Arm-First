@@ -43,7 +43,8 @@ int32_t port_drv_set_pin_func(uint32_t port_no, uint32_t mode, uint32_t init_val
     uint32_t bno = get_bno(port_no);
     uint32_t pmode = get_mode(mode);
     uint32_t pfunc = get_func(mode);
-    uint32_t set_val = 0;
+    uint32_t set_val;
+    uint32_t mask;
 
     // parameter check
     if (pno >= PORT_NO_MAX) {
@@ -59,30 +60,18 @@ int32_t port_drv_set_pin_func(uint32_t port_no, uint32_t mode, uint32_t init_val
         return ERR_PAR;
     }
 
-    // set port type
+    // set pin initial val for output / pin function select
     if (pmode == PORT_INPUT) {
-        // get port mode 
-        set_val = get_word(base_reg_addr[pno] + GPIOx_MODER);
-        // clear 2bit 
-        set_val = set_val & ~(0x03<<(bno*2));
-        // set port mode
-        set_val = set_val | (PORT_INPUT<<(bno*2));
-        set_word(base_reg_addr[pno] + GPIOx_MODER, set_val);
+        // nope
     } else if (pmode == PORT_OUTPUT) {
-        // get pin level
+        // get current pin level
         set_val = get_word(base_reg_addr[pno] + GPIOx_ODR);
-        // clear pin level
-        set_val = set_val & ~(1<<bno);
-        // set initial pin level
-        set_val = set_val | (init_val<<bno); 
-        set_hword(base_reg_addr[pno] + GPIOx_ODR, set_val);
-        // get port mode 
-        set_val = get_word(base_reg_addr[pno] + GPIOx_MODER);
-        // clear 2bit 
-        set_val = set_val & ~(0x03<<(bno*2));
-        // set port mode
-        set_val = set_val | (PORT_OUTPUT<<(bno*2));
-        set_word(base_reg_addr[pno] + GPIOx_MODER, set_val);
+        // create mask val
+        mask = 1<<bno;
+        // set pin level
+        set_field(uint32_t, set_val, mask, init_val);
+        // set register
+        set_word(base_reg_addr[pno] + GPIOx_ODR, set_val);
         // set push-pull or open-drain
         
         // set pull-up or pull-down
@@ -90,33 +79,33 @@ int32_t port_drv_set_pin_func(uint32_t port_no, uint32_t mode, uint32_t init_val
         // set normal speed or high speed
 
     } else if (pmode == PORT_ANALOG) {
-        // get port mode 
-        set_val = get_word(base_reg_addr[pno] + GPIOx_MODER);
-        // clear 2bit 
-        set_val = set_val & ~(0x03<<(bno*2));
-        // set port mode
-        set_val = set_val | (PORT_ANALOG<<(bno*2));
-        set_word(base_reg_addr[pno] + GPIOx_MODER, set_val);
+        // nope
     } else if (pmode == PORT_FUNC) {
-        // get port mode 
-        set_val = get_word(base_reg_addr[pno] + GPIOx_MODER);
-        // clear 2bit 
-        set_val = set_val & ~(0x03<<(bno*2));
-        // set port mode
-        set_val = set_val | (PORT_FUNC<<(bno*2));
-        set_word(base_reg_addr[pno] + GPIOx_MODER, set_val);
         // set function
         if (bno >= 8) {
-            set_val = get_word(base_reg_addr[pno] + GPIOx_AFRH)|(pfunc<<(bno*4));
+            set_val = get_word(base_reg_addr[pno] + GPIOx_AFRH);
+            mask = (0x03)<<(bno*4);
+            set_field(uint32_t, set_val, mask, pfunc);
             set_word(base_reg_addr[pno] + GPIOx_AFRH, set_val);
         } else {
-            set_val = get_word(base_reg_addr[pno] + GPIOx_AFRL)|(pfunc<<(bno*4));
+            set_val = get_word(base_reg_addr[pno] + GPIOx_AFRL);
+            mask = (0x03)<<(bno*4);
+            set_field(uint32_t, set_val, mask, pfunc);
             set_word(base_reg_addr[pno] + GPIOx_AFRL, set_val);
         }
     } else {
         // nope
     }
 
+    // get GPIOx_MODER reg val 
+    set_val = get_word(base_reg_addr[pno] + GPIOx_MODER);
+    // create mask val. Each pin has two bits for config. 
+    mask = (0x03)<<(bno*2);
+    // set pin mode 
+    set_field(uint32_t, set_val, mask, pmode);
+    // set register
+    set_word(base_reg_addr[pno] + GPIOx_MODER, set_val);
+ 
     return ERR_OK;
 }
 
@@ -128,6 +117,7 @@ int32_t port_drv_set_pin_lvl(uint32_t port_no, uint32_t lvl)
     uint32_t pno = get_pno(port_no);
     uint32_t bno = get_bno(port_no);
     uint32_t set_val;
+    uint32_t mask;
 
     // parameter check
     if (pno >= PORT_NO_MAX) {
@@ -139,8 +129,8 @@ int32_t port_drv_set_pin_lvl(uint32_t port_no, uint32_t lvl)
 
     // set port output level
     set_val = get_word(base_reg_addr[pno] + GPIOx_ODR);
-    set_val = set_val & ~(1<<bno);
-    set_val = set_val | (lvl<<bno);
+    mask = 1<<bno;
+    set_field(uint32_t, set_val, mask, lvl);
     set_hword(base_reg_addr[pno] + GPIOx_ODR, set_val);
 
     return ERR_OK;
