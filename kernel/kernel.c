@@ -30,15 +30,14 @@ static void nvic_init(void)
  */
 void kernel_init(void)
 {
+    // module init
     systick_init();
     mem_init();
-
+    
+    // init systick and enable interrupt
     enable_int(); 
-    //port_drv_set_pin_func(PORTB4, PORTB4_OUTPUT, PORT_LVL_HIGH, 0, 0, 0);
     systick_init();
     systick_start(SYSTICK_CLK_AHB_DIV_8, AHB_CLOCK_FREQ/8);
-
-    get_int_stat();
 
     // jump to application main
     app_main();

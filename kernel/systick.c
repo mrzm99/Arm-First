@@ -43,9 +43,9 @@ static void systick_handler(void)
 void systick_init(void)
 {
     // SysTick disable
-    set_word(STK_CTRL, 0, 0x00000000);
+    set_word(STK_CTRL + 0, 0x00000000);
     // clear current cnt val
-    set_word(STK_VAL, 0, 0x00000000);
+    set_word(STK_VAL + 0, 0x00000000);
 }
 
 
@@ -64,13 +64,13 @@ int32_t systick_start(uint32_t clk_src, uint32_t clk_MHz)
 
     // set count value for 1ms cycle
     cnt_val = ((clk_MHz * 1000 * 1000) / (1000)) - 1;
-    set_word(STK_LOAD, 0, cnt_val);
+    set_word(STK_LOAD, cnt_val);
 
     // set SysTick exception handler
     set_handler(INTHDLR_NO_SYSTICK, systick_handler);
 
     // set SysTick exception priority
-    set_word(SHPR3, 0, INT_PRI_SYSTICK<<8);
+    set_word(SHPR3, INT_PRI_SYSTICK<<8);
 
     // set SysTick clock source 
     if (clk_src == SYSTICK_CLK_AHB_DIV_8) {
@@ -79,7 +79,7 @@ int32_t systick_start(uint32_t clk_src, uint32_t clk_MHz)
         set_val = 1<<2;
     } 
     set_val |= 0x03;    // enable systick and exception 
-    set_word(STK_CTRL, 0, set_val); 
+    set_word(STK_CTRL, set_val); 
 
     return ERR_OK;
 }

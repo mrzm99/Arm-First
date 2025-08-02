@@ -44,7 +44,7 @@ void init_vecttbl(void)
     vect_table[INTHDLR_NO_RESET] = reset_handlr;
 
     // set vector table address to VTOR
-    set_word(SCB, VTOR, vect_table);
+    set_word(SCB + VTOR, vect_table);
 }
 
 /*--------------------------------------------------------------------------------------*/

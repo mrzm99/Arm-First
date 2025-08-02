@@ -57,28 +57,28 @@ static void clock_init(void)
     // f(vco)= PLLin * (PLLN/PLLM) = 320MHz
     // f(pll out)= f(vco) / PLLP = 160MHz
     // f(usb otg, fs, sdio, rng)= f(vco) / PLLQ = 40MHz
-    set_word(RCC, RCC_PLLCFGR, 0x08000282);
+    set_word(RCC + RCC_PLLCFGR, 0x08000282);
     // PLLSAI:on|PLLI2S:on|PLL:on|Clock security:off|HSE bypassed|HSE:on|HSI:on
-    set_word(RCC, RCC_CR, 0x05010001);
+    set_word(RCC + RCC_CR, 0x05010001);
 
     // System clock = PLL = 160MHz
     // AHB = system clock / 1 = 160MHz
     // APB1 = AHB / 4 = 40MHz
     // APB2 = AHB / 2 = 80MHz
     // RTC = HSE / 16 = 1MHz
-    set_word(RCC, RCC_CFGR, 0xA4109402);
+    set_word(RCC + RCC_CFGR, 0xA4109402);
 
     // USB OTG / Ether / DMA2 / DMA1 / CCM and RAM / SRAM/ CRC enable
     // IO port I,H,G,F,E,D,C,B,A enable
-    set_word(RCC, RCC_AHB1ENR, 0x7E7411FF);
+    set_word(RCC + RCC_AHB1ENR, 0x7E7411FF);
     // Flexible static memory controller module clock enable
-    set_word(RCC, RCC_AHB3ENR, 0x00000001);
+    set_word(RCC + RCC_AHB3ENR, 0x00000001);
     // I2C1,2,3,4 / UART2,3,4,5 / SPI2,3 / TIM14,13,12,7,6,5,4,3,2
-    set_word(RCC, RCC_APB1ENR, 0x00FEC1FF);
+    set_word(RCC + RCC_APB1ENR, 0x00FEC1FF);
     // TIM11,10,9 / System configuration controller / SPI1 / SDIO / USART6,1 / TIM8,1
-    set_word(RCC, RCC_APB2ENR, 0x00075833);
+    set_word(RCC + RCC_APB2ENR, 0x00075833);
     // RTC clock enable
-    set_word(RCC, RCC_BDCR, 0x00008000);
+    set_word(RCC + RCC_BDCR, 0x00008000);
 
 
 }
@@ -92,11 +92,11 @@ void system_init(void)
     section_init();
 
     // flash data/instruction cach reset
-    set_word(FLASH_INTERFACE, FLASH_ACR, 0x00001800);
+    set_word(FLASH_INTERFACE + FLASH_ACR, 0x00001800);
     // flash cancell data/instruction cach reset
-    set_word(FLASH_INTERFACE, FLASH_ACR, 0x00000000);
+    set_word(FLASH_INTERFACE + FLASH_ACR, 0x00000000);
     // flash data/instruction cach enable / set access latency = 5 for SYSTEM CLOCK(160MHz)
-    set_word(FLASH_INTERFACE, FLASH_ACR, 0x00000705);
+    set_word(FLASH_INTERFACE + FLASH_ACR, 0x00000705);
 
     // init clock
     clock_init();

@@ -13,12 +13,12 @@
  /*--------------------------------------------------------------------------------------*/
  /*! @brief operate register/memory
   */
- #define set_word(base, offset, val)    (*((volatile uint32_t *)(base + offset)) = (uint32_t)val)
- #define set_hword(base, offset, val)   (*((volatile uint16_t *)(base + offset)) = (uint16_t)val)
- #define set_byte(base, offset, val)    (*((volatile uint8_t *)(base + offset)) = (uint8_t)val)
- #define get_word(base, offset)         (*((volatile uint32_t *)(base + offset)))
- #define get_hword(base, offset)        (*((volatile uint16_t *)(base + offset)))
- #define get_byte(base, offset)         (*((volatile uint8_t *)(base + offseet)))
+ #define set_word(addr, val)    (*((volatile uint32_t *)(addr)) = (uint32_t)val)
+ #define set_hword(addr, val)   (*((volatile uint16_t *)(addr)) = (uint16_t)val)
+ #define set_byte(addr, val)    (*((volatile uint8_t  *)(addr)) = (uint8_t) val)
+ #define get_word(addr)         (*((volatile uint32_t *)(addr)))
+ #define get_hword(addr)        (*((volatile uint16_t *)(addr)))
+ #define get_byte(addr)         (*((volatile uint8_t  *)(addr)))
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief memory align 
