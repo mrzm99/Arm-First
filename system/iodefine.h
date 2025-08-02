@@ -29,8 +29,8 @@
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  register offset of SCB (System Contorol Block)
  */
-
- #define VTOR                   (0x08U)
+#define ICSR                    (0x04U)
+#define VTOR                    (0x08U)
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  register offset of FLASH INTERFACE
