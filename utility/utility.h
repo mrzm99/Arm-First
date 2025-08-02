@@ -40,11 +40,11 @@ extern uint32_t get_int_stat(void);
 /*--------------------------------------------------------------------------------------*/
 /*! @bjief field operation 
  */
-#define set_field(type, reg, mask, val)     (reg=((type)((reg)&(~(mask))))|((type)((val)<<get_sft_num(mask))))
+#define set_field(type, reg, mask, val)     reg=((type)((reg)&(~(mask))))|((type)((val)<<get_sft_num(mask)))
 #define clr_field(type, reg, mask)          (reg=((type)((reg)&(~(mask))))) 
 #define get_field(type, reg, mask)          ((type)((reg)&(~(mask)))>>get_sft_num(mask))
 
-#define get_sft_num(mask)                   ((mask)&(1U<<0))?0:\
+#define get_sft_num(mask)                   (((mask)&(1U<<0))?0:\
                                             ((mask)&(1U<<1))?1:\
                                             ((mask)&(1U<<2))?2:\
                                             ((mask)&(1U<<3))?3:\
@@ -75,5 +75,5 @@ extern uint32_t get_int_stat(void);
                                             ((mask)&(1U<<28))?28:\
                                             ((mask)&(1U<<29))?29:\
                                             ((mask)&(1U<<30))?30:\
-                                            ((mask)&(1U<<31))?31:31
+                                            ((mask)&(1U<<31))?31:31)
 
