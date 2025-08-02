@@ -38,6 +38,12 @@ extern void busy_wait(uint32_t cnt);
 extern uint32_t get_int_stat(void);
 
 /*--------------------------------------------------------------------------------------*/
+/*! @brief  critical section 
+ */
+#define critical_section_start()    { unsigned int __primask__ = get_int_stat(); disable_int()
+#define critical_section_end()      if (!__primask__) { enable_int(); }}
+
+/*--------------------------------------------------------------------------------------*/
 /*! @bjief field operation 
  */
 #define set_field(type, reg, mask, val)     reg=((type)((reg)&(~(mask))))|((type)((val)<<get_sft_num(mask)))
