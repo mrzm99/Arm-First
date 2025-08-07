@@ -7,7 +7,7 @@
 Concole Task
 
 ## Device Driver 
-port driver  
+port driver (done)
 timer driver  
 UART driver  
 SPI driver  
@@ -15,7 +15,7 @@ I2C driver
 SD card driver  
 
 ## RTOS implementation
-Dispatch  
+Dispatch (done) 
 Task  
 Interrupt Handerl   
 Cycle Handler  
@@ -28,7 +28,7 @@ Mutex
 
 ## Kernel funciton
 MPU  
-Memory allocation
+Memory allocation (done)
 
 
 
