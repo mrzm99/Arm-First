@@ -70,7 +70,9 @@ int32_t systick_start(uint32_t clk_src, uint32_t clk_MHz)
     set_handler(INTHDLR_NO_SYSTICK, systick_handler);
 
     // set SysTick exception priority
-    set_word(SHPR3, INT_PRI_SYSTICK<<8);
+    set_val = get_word(SHPR3);
+    set_field(uint32_t, set_val, 0xFF000000, INT_PRI_SYSTICK);
+    set_word(SHPR3, set_val);
 
     // set SysTick clock source 
     if (clk_src == SYSTICK_CLK_AHB_DIV_8) {

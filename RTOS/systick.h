@@ -19,7 +19,9 @@
 #define     SYSTICK_CLK_AHB             (1)     // AHB
 #define     SYSTICK_CLK_MAX             (2)  
 
-
+/*--------------------------------------------------------------------------------------*/
+/*! @brief  SysTick func 
+ */
 void systick_init(void);
 int32_t systick_start(uint32_t clk_src, uint32_t clk_MHz);
 
