@@ -52,5 +52,10 @@ typedef void(*FP)(void);
 #define E_NOID      (-34)
 #define E_OBJ       (-41)
 #define E_NOEXS     (-42)
+#define E_QOVR      (-43)
+#define E_RLWAI     (-49)
+#define E_TMOUT     (-50)
+#define E_DLT       (-51)
+#define E_BOVR      (-58)
 
 #endif
