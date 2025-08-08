@@ -159,7 +159,34 @@ EXIT_CRITICAL_SECTION:
  */
 ER sta_cyc(ID cycid)
 {
+    ccb_t *p_ccb;
+    ER ercd = E_OK;
 
+    // parameter check
+    if (cycid >= CYC_HDR_NUM) {
+        return E_PAR;
+    }
+
+    // start critical section
+    critical_section_start();
+
+    // get ccb from cycid
+    p_ccb = &ccb[cycid];
+    // check ccb state
+    if (p_ccb->cycstat == CS_NOEXT) {
+        ercd = E_OBJ;
+    } else if (p_ccb->cycstat == CS_RUN) {
+        // nope
+    } else if (p_ccb->cycstat == CS_STP) {
+        rdy_cyc_que(p_ccb);
+    } else {
+        // nope
+    }
+
+    // end critical section
+    critical_section_end();
+
+    return ercd;
 }
 
 /*--------------------------------------------------------------------------------------*/
@@ -167,6 +194,29 @@ ER sta_cyc(ID cycid)
  */
 ER stp_cyc(ID cycid)
 {
+    ccb_t *p_ccb;
 
+    // parameter check
+    if (cycid >= CYC_HDR_NUM) {
+        return E_PAR;
+    }
+
+    // start critical section
+    critical_section_start();
+
+    // get ccb  from cycid
+    p_ccb = &ccb[cycid];
+    // check cyc state
+    if ((p_ccb->cycstat & CS_RUN) != CS_RUN) {
+        // nope
+    } else {
+        p_ccb->cycstat = CS_STP;
+        deque(&p_ccb->cyc_que);
+    }
+
+    // end critical section
+    critical_section_end();
+
+    return E_OK;
 }
 
