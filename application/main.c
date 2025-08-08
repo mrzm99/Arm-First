@@ -30,14 +30,17 @@ static void test_cyc(void)
 void app_main(void)
 {
     T_CCYC ccyc;
-    ccyc.cycatr = TA_HLANG|TA_STA;
+    ccyc.cycatr = TA_HLANG|TA_PHS;
     ccyc.exinf = NULL;
     ccyc.cychdr = test_cyc;
     ccyc.cyctime = 1000;
-    ccyc.cycphs = 0;
+    ccyc.cycphs = 3000;
     port_drv_set_pin_func(PORTB4, PORTB4_OUTPUT, PORT_LVL_HIGH, 0, 0, 0);
 
     if (cre_cyc(0, &ccyc) < 0) {
+        while (1);
+    }
+    if (sta_cyc(0) < 0) {
         while (1);
     }
     while (1); 
