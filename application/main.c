@@ -12,33 +12,16 @@
 #include "utility.h"
 #include "task_manage.h"
 #include "task_sync.h"
+#include "cyc_hdlr.h"
 #include <stdio.h>
 
-static void test_dly(void)
+static void test_cyc(void)
 {
     uint32_t set_val;
 
-    port_drv_set_pin_func(PORTB4, PORTB4_OUTPUT, PORT_LVL_HIGH, 0, 0, 0);
-    while (1) {
-        dly_tsk(1000);
-        set_val = port_drv_get_pin_lvl(PORTB4); 
-        set_val = (~set_val) & 1;
-        port_drv_set_pin_lvl(PORTB4, set_val);
-    }
-}
-
-static void test_task(void)
-{
-    T_CTSK ctsk;
-    ctsk.tskatr = TA_HLANG|TA_ACT;
-    ctsk.exinf = NULL;
-    ctsk.task = test_dly;
-    ctsk.itskpri = 0;
-    ctsk.stksz = 1024;
-    ctsk.stk = NULL;
-    cre_tsk(0, &ctsk);
-
-    while (1);
+    set_val = port_drv_get_pin_lvl(PORTB4); 
+    set_val = (~set_val) & 1;
+    port_drv_set_pin_lvl(PORTB4, set_val);
 }
 
 /*--------------------------------------------------------------------------------------*/
@@ -46,17 +29,16 @@ static void test_task(void)
  */
 void app_main(void)
 {
-    T_CTSK ctsk;
-    ctsk.tskatr = TA_HLANG|TA_ACT;
-    ctsk.exinf = NULL;
-    ctsk.task = test_task;
-    ctsk.itskpri = 4;
-    ctsk.stksz = 1024;
-    ctsk.stk = NULL;
+    T_CCYC ccyc;
+    ccyc.cycatr = TA_HLANG|TA_STA;
+    ccyc.exinf = NULL;
+    ccyc.cychdr = test_cyc;
+    ccyc.cyctime = 1000;
+    ccyc.cycphs = 0;
+    port_drv_set_pin_func(PORTB4, PORTB4_OUTPUT, PORT_LVL_HIGH, 0, 0, 0);
 
-    if (cre_tsk(4, &ctsk) < 0) {
+    if (cre_cyc(0, &ccyc) < 0) {
         while (1);
     }
-
     while (1); 
 }

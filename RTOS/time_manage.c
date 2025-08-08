@@ -14,6 +14,7 @@
 #include "que.h"
 #include "kernel_schedule.h"
 #include "task_manage.h"
+#include "cyc_hdlr.h"
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  macro 
@@ -62,6 +63,14 @@ static void knl_sig_tim(void)
 }
 
 /*--------------------------------------------------------------------------------------*/
+/*! @brief  kernel sig cyc 
+ */
+static void knl_sig_cyc(void)
+{
+    sig_cyc();
+}
+
+/*--------------------------------------------------------------------------------------*/
 /*! @brief  sig timer 
  */
 ER sig_time(void)
@@ -72,6 +81,7 @@ ER sig_time(void)
     // timer tick process
     knl_sig_tim();
     // cycle handler process
+    knl_sig_cyc();
     // alarm handler process
     // overrun hanlder process
     // task schedule

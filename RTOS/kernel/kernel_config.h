@@ -10,15 +10,19 @@
 #ifndef __KERNEL_CONFIG_H__
 #define __KERNEL_CONFIG_H__
 
-// TASK NUM
-#define TSK_NUM             (10)
+/*--------------------------------------------------------------------------------------*/
+/*! @brief  TASK config 
+ */
+#define TSK_NUM             (10)                // TASK NUM
+#define TSK_PRI_NUM         (10)                // TASK Priority NUM
+#define TSK_PRI_MAX         (0)                 // TASK Priority Max 
+#define TSK_PRI_MIN         (TSK_PRI_NUM-1)     // TASK Priority Min
 
-// TASK Priority
-#define TSK_PRI_NUM         (10)
-#define TSK_PRI_MAX         (0)
-#define TSK_PRI_MIN         (TSK_PRI_NUM-1)
+#define TSK_WUP_MAX         (5)                 // Waku up count max
 
-// Wake up count max
-#define TSK_WUP_MAX         (5)
+/*--------------------------------------------------------------------------------------*/
+/*! @brief  Cycle Handler config 
+ */
+#define CYC_HDR_NUM         (5)                 // Cycle Hanlder NUM
 
 #endif
