@@ -12,29 +12,16 @@
 #include "utility.h"
 #include "error.h"
 #include "systick.h"
-#include "port_drv.h"   
 #include "int_hdlr.h"
 #include "system_define.h"
+#include "time_manage.h"
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  systick handler
  */
 static void systick_handler(void)
 {
-    static int cnt = 0; // debug
-    static int lvl = 0;
-
-    port_drv_set_pin_func(PORTA2, PORTA2_OUTPUT, PORT_LVL_HIGH, 0, 0, 0);
-    port_drv_set_pin_func(PORTA3, PORTA3_OUTPUT, PORT_LVL_HIGH, 0, 0, 0);
-    if (++cnt >= 1000) {
-        cnt = 0;
-        if (lvl) {
-            port_drv_set_pin_lvl(PORTB4, PORT_LVL_HIGH);
-        } else {
-            port_drv_set_pin_lvl(PORTB4, PORT_LVL_LOW);
-        }
-        lvl = ~lvl;
-    }
+    sig_time();
 }
 
 /*--------------------------------------------------------------------------------------*/
@@ -70,7 +57,9 @@ int32_t systick_start(uint32_t clk_src, uint32_t clk_MHz)
     set_handler(INTHDLR_NO_SYSTICK, systick_handler);
 
     // set SysTick exception priority
-    set_word(SHPR3, INT_PRI_SYSTICK<<8);
+    set_val = get_word(SHPR3);
+    set_field(uint32_t, set_val, 0xFF000000, INT_PRI_SYSTICK);
+    set_word(SHPR3, set_val);
 
     // set SysTick clock source 
     if (clk_src == SYSTICK_CLK_AHB_DIV_8) {

@@ -1,28 +1,28 @@
 /*--------------------------------------------------------------------------------------*/
 /*!
- *  @file   systick.h 
+ *  @file   task_sync.h 
  *  @date   2025.xx.xx
  *  @author mrzm99
- *  @brief  SysTick timer 
+ *  @brief  
  *  @note
  */
 /*--------------------------------------------------------------------------------------*/
-#ifndef __SYSTICK_H__
-#define __SYSTICK_H__
+#ifndef __TASK_SYNC_H__
+#define __TASK_SYNC_H__
 
-#include <stdint.h>
-
-/*--------------------------------------------------------------------------------------*/
-/*! @brief  SysTick clock source 
- */
-#define     SYSTICK_CLK_AHB_DIV_8       (0)     // AHB/8
-#define     SYSTICK_CLK_AHB             (1)     // AHB
-#define     SYSTICK_CLK_MAX             (2)  
+#include "kernel_define.h"
 
 /*--------------------------------------------------------------------------------------*/
-/*! @brief  SysTick func 
+/*! @brief  tmo macro 
  */
-void systick_init(void);
-int32_t systick_start(uint32_t clk_src, uint32_t clk_MHz);
+#define TMO_POL         (0)
+#define TMO_FEVR        (-1)
+
+/*--------------------------------------------------------------------------------------*/
+/*! @brief  Service Call 
+ */
+ER wup_tsk(ID tskid);
+ER slp_tsk(TMO tmout);
+ER dly_tsk(RELTIM dlytim);
 
 #endif

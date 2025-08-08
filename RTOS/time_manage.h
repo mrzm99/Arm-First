@@ -1,19 +1,20 @@
 /*--------------------------------------------------------------------------------------*/
 /*!
- *  @file   kernel.h 
+ *  @file   time_manage.h 
  *  @date   2025.xx.xx
  *  @author mrzm99
  *  @brief  
  *  @note
  */
 /*--------------------------------------------------------------------------------------*/
-#ifndef __KERNEL_H__
-#define __KERNEL_H__
+#ifndef __TIME_MANAGE_H__
+#define __TIME_MANAGE_H__
+
+#include "kernel_define.h"
 
 /*--------------------------------------------------------------------------------------*/
-/*! @brief  kernel module init
- *          call this func before main func
+/*! @brief  sig_time is only called in SysTick hanlder
  */
-void kernel_init(void);
+ER sig_time(void);
 
 #endif

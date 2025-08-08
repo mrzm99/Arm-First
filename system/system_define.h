@@ -22,9 +22,11 @@
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  Interrupt pirority
  */
-#define INT_PRI_MIN         (0)
-#define INT_PRI_NAX         (255)
-#define INT_PRI_SYSTICK     (10) 
+#define INT_PRI_SYSTEM_EXCEPTION_SFT_NUM    (4)
+#define INT_PRI_MAX                         (0)
+#define INT_PRI_MIN                         (255)
+#define INT_PRI_SYSTICK                     (1<<INT_PRI_SYSTEM_EXCEPTION_SFT_NUM) 
+#define INT_PRI_PENDSV                      (10<<INT_PRI_SYSTEM_EXCEPTION_SFT_NUM)
 
 
 #endif

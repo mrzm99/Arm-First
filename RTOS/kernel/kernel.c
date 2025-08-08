@@ -11,9 +11,11 @@
 #include "iodefine.h"
 #include "systick.h"
 #include "utility.h"
-#include "port_drv.h"
 #include "system_define.h"
 #include "mem_alloc/mem_alloc.h"
+#include "task_manage.h"
+#include "kernel_schedule.h"
+#include "stdio.h"
 
 extern void app_main(void);
 
@@ -31,6 +33,8 @@ static void nvic_init(void)
 void kernel_init(void)
 {
     // module init
+    kernel_task_init();
+    pendsv_init();
     systick_init();
     mem_init();
     
