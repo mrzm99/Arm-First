@@ -48,6 +48,7 @@ reset_handlr:
     mov     r0, #0              @ initialize PSR register
     msr     APSR_nzcvq, r0
     mov     r1, #2              @ use PSP in thread mode
+    cpsid   i                   @ disable interrupt
     b       system_init         @ never return
 
 /*--------------------------------------------------------------------------------------*/

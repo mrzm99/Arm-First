@@ -22,16 +22,15 @@
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  macro 
  */
-#define get_tcb_from_tskid(tskid)       (&tcb[(tskid)])
 #define is_que_empty(p_que)             ((p_que)->p_next == (p_que)?true:false)
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  task management object
  */
-tcb_t tcb[TSK_NUM_MAX];                 // TCB entity
+tcb_t tcb[TSK_NUM];                 // TCB entity
 tcb_t *p_knl_run_tcb;                   // run state TCB
 tcb_t *p_knl_top_tcb;                   // top TCB of ready que
-que_t knl_rdy_que_root[TSK_PRI_MAX];    // ready que
+que_t knl_rdy_que_root[TSK_PRI_NUM];    // ready que
 que_t knl_tim_que_root;                 // timer que
 
 /*--------------------------------------------------------------------------------------*/
@@ -80,7 +79,7 @@ static void make_tcb_ready(tcb_t *p_tcb, VP_INT *exinf)
  */
 tcb_t *get_top_ready_que(void)
 {
-    for (uint32_t i = 0; i < TSK_PRI_MAX; i++) {
+    for (uint32_t i = 0; i < TSK_PRI_NUM; i++) {
         if (is_que_empty(&knl_rdy_que_root[i]) == false) {
             return (tcb_t*)knl_rdy_que_root[i].p_next;
         }
@@ -94,14 +93,14 @@ tcb_t *get_top_ready_que(void)
 void kernel_task_init(void)
 {
     // zero clear TCB
-    memset(tcb, 0, sizeof(tcb_t) * TSK_NUM_MAX);
+    memset(tcb, 0, sizeof(tcb_t) * TSK_NUM);
     // init global variables
     p_knl_run_tcb = NULL;
     p_knl_top_tcb = NULL;
-    for (int i = 0; i < TSK_NUM_MAX; i++) {
+    for (int i = 0; i < TSK_NUM; i++) {
         tcb[i].tskid = -1;
     }
-    for (int i = 0; i < TSK_PRI_MAX; i++) {
+    for (int i = 0; i < TSK_PRI_NUM; i++) {
         que_init(&knl_rdy_que_root[i]);
     }
     que_init(&knl_tim_que_root);
@@ -121,13 +120,13 @@ ER cre_tsk(ID tskid, T_CTSK *pk_ctsk)
     if (pk_ctsk->task == NULL) {
         return E_PAR;
     }
-    if (pk_ctsk->itskpri >= TSK_PRI_MAX) {
+    if (pk_ctsk->itskpri >= TSK_PRI_NUM) {
         return E_PAR;
     } 
     if (pk_ctsk->stksz == 0) {
         return E_PAR;
     }
-    if (tskid >= TSK_NUM_MAX) {
+    if (tskid >= TSK_NUM) {
         return E_PAR;
     }
 
