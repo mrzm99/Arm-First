@@ -144,9 +144,6 @@ void kernel_task_make_wait(tcb_t *p_tcb, STAT tskwait, TMO tmout, ATR objatr, qu
         return;
     }
 
-    // start critical section
-    critical_section_start();
-
     // set tcb
     deque(&p_tcb->ready_que);
     p_tcb->tskwait = tskwait;
@@ -175,9 +172,6 @@ void kernel_task_make_wait(tcb_t *p_tcb, STAT tskwait, TMO tmout, ATR objatr, qu
     if (p_tcb->lefttmo != TMO_FEVR) {
         enque_last(&knl_tim_que_root, &p_tcb->tim_que); 
     }
-    
-    // end critical section
-    critical_section_end();
 }
 
 /*--------------------------------------------------------------------------------------*/
@@ -189,8 +183,6 @@ void kernel_task_wait_release(tcb_t *p_tcb, ER ercd)
     if (p_tcb == NULL) {
         return;
     }
-    // start critical section
-    critical_section_start();
 
     // deque from tim que 
     deque(&p_tcb->tim_que);
@@ -201,14 +193,11 @@ void kernel_task_wait_release(tcb_t *p_tcb, ER ercd)
     // set tcb
     p_tcb->ercd = ercd;
     p_tcb->tskwait = TW_NOWAIT;
-    p_tcb->tskstat &= TS_WAIT;
+    p_tcb->tskstat &= ~TS_WAIT;
     // enque ready que
     if (p_tcb->tskstat == 0) {
        put_rdy_que(p_tcb); 
     }
-
-    // end critical section end
-    critical_section_end();
 }
 
 /*--------------------------------------------------------------------------------------*/

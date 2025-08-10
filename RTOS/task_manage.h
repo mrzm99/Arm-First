@@ -102,9 +102,10 @@ typedef struct {
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  macro 
  */
-#define put_rdy_que(p_tcb)      (enque_last(&knl_rdy_que_root[(p_tcb)->tskpri], &((p_tcb)->ready_que)))
-#define put_tim_que(p_tcb)      (enque_last(&knl_tim_que_root, &((p_tcb)->tim_que)))
+#define put_rdy_que(p_tcb)              (enque_last(&knl_rdy_que_root[(p_tcb)->tskpri], &((p_tcb)->ready_que)))
+#define put_tim_que(p_tcb)              (enque_last(&knl_tim_que_root, &((p_tcb)->tim_que)))
 #define get_tcb_from_tskid(tskid)       (&tcb[(tskid)])
+#define get_my_tcb()                    (p_knl_run_tcb) 
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  kernel func 

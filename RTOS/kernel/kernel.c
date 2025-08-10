@@ -16,6 +16,7 @@
 #include "task_manage.h"
 #include "kernel_schedule.h"
 #include "cyc_hdlr.h"
+#include "semaphore.h"
 #include "stdio.h"
 
 extern void app_main(void);
@@ -36,6 +37,7 @@ void kernel_init(void)
     // module init
     kernel_task_init();
     kernel_cyc_init();
+    kernel_sem_init();
     pendsv_init();
     systick_init();
     mem_init();
