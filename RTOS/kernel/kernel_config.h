@@ -25,4 +25,9 @@
  */
 #define CYC_HDR_NUM         (5)                 // Cycle Hanlder NUM
 
+/*--------------------------------------------------------------------------------------*/
+/*! @brief  Semaphore config 
+ */
+#define SEM_NUM             (5)                 // Semaphore NUM
+                                                
 #endif
