@@ -14,6 +14,7 @@
 #include "kernel_schedule.h"
 #include "utility.h"
 #include "mem_alloc.h"
+#include "task_sync.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -23,11 +24,12 @@
 /*! @brief  macro 
  */
 #define is_que_empty(p_que)             ((p_que)->p_next == (p_que)?true:false)
+#define get_tskpri_from_rdy_que(p_que)  (((tcb_t*)(p_que))->tskpri)
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  task management object
  */
-tcb_t tcb[TSK_NUM];                 // TCB entity
+tcb_t tcb[TSK_NUM];                     // TCB entity
 tcb_t *p_knl_run_tcb;                   // run state TCB
 tcb_t *p_knl_top_tcb;                   // top TCB of ready que
 que_t knl_rdy_que_root[TSK_PRI_NUM];    // ready que
@@ -75,6 +77,32 @@ static void make_tcb_ready(tcb_t *p_tcb, VP_INT *exinf)
 }
 
 /*--------------------------------------------------------------------------------------*/
+/*! @brief  enque in order of priority 
+ */
+static void enque_pri(que_t *p_root, que_t *p_input_que)
+{
+    PRI elm_tskpri;
+    PRI input_tskpri = get_tskpri_from_rdy_que(p_input_que);
+    que_t *p_elm = p_root->p_next;
+
+    // loop all elements
+    while (p_root != p_elm) {
+        // get tskpri and compare
+        elm_tskpri = get_tskpri_from_rdy_que(p_elm);
+        // lower num is higher priority
+        if (input_tskpri < elm_tskpri) {
+            // enque
+            enque(p_elm->p_prev, p_elm, p_input_que);
+        }
+
+        p_elm = p_elm->p_next;
+    }
+    
+    // Lowest priority
+    enque_last(p_root, p_input_que);
+}
+
+/*--------------------------------------------------------------------------------------*/
 /*! @brief  get ready top 
  */
 tcb_t *get_top_ready_que(void)
@@ -104,6 +132,126 @@ void kernel_task_init(void)
         que_init(&knl_rdy_que_root[i]);
     }
     que_init(&knl_tim_que_root);
+}
+
+/*--------------------------------------------------------------------------------------*/
+/*! @brief  make task wait
+ */
+void kernel_task_make_wait(tcb_t *p_tcb, STAT tskwait, TMO tmout, ATR objatr, que_t *p_root_que, ID objid)
+{
+    // parameter check
+    if (p_tcb == NULL) {
+        return;
+    }
+
+    // set tcb
+    deque(&p_tcb->ready_que);
+    p_tcb->tskwait = tskwait;
+    p_tcb->tskstat = TS_WAIT;
+    p_tcb->lefttmo = tmout;
+    p_tcb->waiobjid = objid;
+    p_tcb->ercd = E_TMOUT;
+
+    // que operation 
+    if (p_root_que == NULL) {
+        // nope
+    } else {
+        if ((objatr & TA_TPRI) == TA_TPRI) {
+            enque_pri(p_root_que, &p_tcb->ready_que);
+            // p_root_que is needed when task priority changed
+            p_tcb->p_root_que = p_root_que;
+        } else if ((objatr & TA_TFIFO) == TA_TFIFO) {
+            enque_last(p_root_que, &p_tcb->ready_que);  
+            p_tcb->p_root_que = NULL;
+        } else {
+            // nope
+        }
+    }
+
+    // enque tim que
+    if (p_tcb->lefttmo != TMO_FEVR) {
+        enque_last(&knl_tim_que_root, &p_tcb->tim_que); 
+    }
+}
+
+/*--------------------------------------------------------------------------------------*/
+/*! @brief  make task release  
+ */
+void kernel_task_wait_release(tcb_t *p_tcb, ER ercd)
+{
+    // parameter check
+    if (p_tcb == NULL) {
+        return;
+    }
+
+    // deque from tim que 
+    deque(&p_tcb->tim_que);
+    // deque from 
+    if (p_tcb->p_root_que != NULL) {
+        deque(&p_tcb->ready_que);
+    }
+    // set tcb
+    p_tcb->ercd = ercd;
+    p_tcb->tskwait = TW_NOWAIT;
+    p_tcb->tskstat &= ~TS_WAIT;
+    // enque ready que
+    if (p_tcb->tskstat == 0) {
+       put_rdy_que(p_tcb); 
+    }
+}
+
+/*--------------------------------------------------------------------------------------*/
+/*! @brief  change tskpri and update tcb 
+ */
+void kernel_tcb_change_tskpri(tcb_t *p_tcb, PRI tskpri)
+{
+    // change current task priority
+    p_tcb->tskpri = tskpri;
+    // in ready que
+    if (p_tcb->tskstat == TS_READY) {
+        deque(&p_tcb->ready_que);
+        put_rdy_que(p_tcb);
+    } else if (p_tcb->tskstat == TS_WAIT) {
+        if (p_tcb->p_root_que != NULL) {
+            enque_pri(p_tcb->p_root_que, &p_tcb->ready_que);
+        } else {
+            // nope
+        }
+    } else {
+        // nope
+    }
+}
+/*--------------------------------------------------------------------------------------*/
+/*! @brief  change task priority
+ */
+ER chg_pri(ID tskid, PRI tskpri)
+{
+    tcb_t *p_tcb;
+
+    // parameter check
+    if (tskid >= TSK_NUM) {
+        return E_ID;
+    }
+    if (tskpri >= TSK_PRI_NUM) {
+        return E_PAR;
+    }
+
+    // start critical section
+    critical_section_start();
+
+    // get tcb
+    p_tcb = &tcb[tskid];
+    // change base priority
+    p_tcb->tskbpri = tskpri;
+    // update que
+    kernel_tcb_change_tskpri(p_tcb, tskpri);
+    // schedule
+    kernel_schedule_task();
+
+    // end critical section
+    critical_section_end();
+
+    return E_OK;
 }
 
 /*--------------------------------------------------------------------------------------*/

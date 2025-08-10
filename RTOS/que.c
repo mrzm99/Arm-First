@@ -39,8 +39,10 @@ void deque(que_t *p_elm)
     que_t *p_prev = p_elm->p_prev;
     que_t *p_next = p_elm->p_next;
 
-    p_prev->p_next = p_next;
-    p_next->p_prev = p_prev;
-    p_elm->p_prev = NULL;
-    p_elm->p_next = NULL;
+    if ((p_prev != NULL) && (p_next != NULL)) {
+        p_prev->p_next = p_next;
+        p_next->p_prev = p_prev;
+        p_elm->p_prev = NULL;
+        p_elm->p_next = NULL;
+    }
 }

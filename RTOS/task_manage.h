@@ -41,6 +41,8 @@ typedef struct {
     PRI         itskpri;        // wake up task priority
     SIZE        stksz;          // stack size
     VP          stk;            // stack top address
+    
+    que_t       *p_root_que;    // Not Null if TA_PRI specified
 } tcb_t;
 
 /*--------------------------------------------------------------------------------------*/
@@ -91,17 +93,28 @@ typedef struct {
 #define TA_ACT          (2)
 
 /*--------------------------------------------------------------------------------------*/
+/*! @brief  QUE Attribute 
+ */
+#define TA_TFIFO        (0x01)
+#define TA_TPRI         (0x02)
+
+
+/*--------------------------------------------------------------------------------------*/
 /*! @brief  macro 
  */
-#define put_rdy_que(p_tcb)      (enque_last(&knl_rdy_que_root[(p_tcb)->tskpri], &((p_tcb)->ready_que)))
-#define put_tim_que(p_tcb)      (enque_last(&knl_tim_que_root, &((p_tcb)->tim_que)))
+#define put_rdy_que(p_tcb)              (enque_last(&knl_rdy_que_root[(p_tcb)->tskpri], &((p_tcb)->ready_que)))
+#define put_tim_que(p_tcb)              (enque_last(&knl_tim_que_root, &((p_tcb)->tim_que)))
 #define get_tcb_from_tskid(tskid)       (&tcb[(tskid)])
+#define get_my_tcb()                    (p_knl_run_tcb) 
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  kernel func 
  */
 void kernel_task_init(void);
 tcb_t *get_top_ready_que(void);
+void kernel_task_make_wait(tcb_t *p_tcb, STAT tskwait, TMO tmout, ATR objatr, que_t *p_root_que, ID objid);
+void kernel_task_wait_release(tcb_t *p_tcb, ER ercd);
+void kernel_tcb_change_tskpri(tcb_t *p_tcb, PRI tskpri);
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  task management object (global variable)
@@ -116,5 +129,6 @@ extern que_t knl_tim_que_root;
 /*! @brief  Service Call 
  */
 ER cre_tsk(ID tskid, T_CTSK *pk_ctsk);
+ER chg_pri(ID tskid, PRI tskpri);
 
 #endif
