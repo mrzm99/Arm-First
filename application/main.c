@@ -40,5 +40,10 @@ void app_main(void)
     if (cre_cyc(0, &ccyc) < 0) {
         while (1);
     }
+    
+    // end app main
+    slp_tsk(TMO_FEVR);
+
+    // no reached 
     while (1); 
 }

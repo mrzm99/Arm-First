@@ -8,7 +8,6 @@
  */
 /*--------------------------------------------------------------------------------------*/
 #include "kernel.h"
-#include "iodefine.h"
 #include "systick.h"
 #include "utility.h"
 #include "system_define.h"
@@ -17,24 +16,27 @@
 #include "kernel_schedule.h"
 #include "cyc_hdlr.h"
 #include "semaphore.h"
-#include "stdio.h"
+#include <kernel_config.h>
+#include <stdio.h>
 
 extern void app_main(void);
 
 /*--------------------------------------------------------------------------------------*/
-/*! @brief
+/*! @brief  kernel init task (idle loop for waiting interrupt)
+ *          If wait in the PendSV handler, the next PendSV interrupt will not be received 
+ *          and dispatch will become impossible. So create a task to wait for interrupts
+ *          when there are no tasks to execute.
  */
-static void nvic_init(void)
+static void kernel_init_task(void)
 {
-
+    while (1);
 }
-
 /*--------------------------------------------------------------------------------------*/
 /*! @brief
  */
 void kernel_init(void)
 {
-    // module init
+    // kernel module init
     kernel_task_init();
     kernel_cyc_init();
     kernel_sem_init();
@@ -46,11 +48,32 @@ void kernel_init(void)
     systick_init();
     systick_start(SYSTICK_CLK_AHB_DIV_8, AHB_CLOCK_FREQ/8);
 
+    // create init task
+    T_CTSK init_ctsk;
+    init_ctsk.tskatr = TA_HLANG|TA_ACT;
+    init_ctsk.exinf = NULL;
+    init_ctsk.task = kernel_init_task;
+    init_ctsk.itskpri = TSK_PRI_MIN;
+    init_ctsk.stksz = 64;
+    init_ctsk.stk = NULL;
+    if (cre_tsk(0, &init_ctsk)) {
+        while (1);
+    }
+
+    // create application main task
+    T_CTSK app_ctsk;
+    app_ctsk.tskatr = TA_HLANG|TA_ACT;
+    app_ctsk.exinf = NULL;
+    app_ctsk.task = app_main;
+    app_ctsk.itskpri = TSK_PRI_MAX;
+    app_ctsk.stksz = 1024;
+    app_ctsk.stk = NULL;
+    if (cre_tsk(1, &app_ctsk)) {
+        while (1);
+    }
+
     // enable interrupt
     enable_int(); 
-
-    // jump to application main
-    app_main();
 
     // never reached
     while (1);
