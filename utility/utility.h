@@ -38,6 +38,11 @@ extern void busy_wait(uint32_t cnt);
 extern uint32_t get_int_stat(void);
 
 /*--------------------------------------------------------------------------------------*/
+/*! @brief  instruction synchronization barrier
+ */
+#define isb()       __asm__ volatile ("ISB")
+
+/*--------------------------------------------------------------------------------------*/
 /*! @brief  critical section 
  */
 #define critical_section_start()    { unsigned int __primask__ = get_int_stat(); disable_int()
