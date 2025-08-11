@@ -40,6 +40,7 @@ void kernel_init(void)
     kernel_task_init();
     kernel_cyc_init();
     kernel_sem_init();
+    kernel_flg_init();
     pendsv_init();
     systick_init();
     mem_init();

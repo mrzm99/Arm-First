@@ -11,6 +11,7 @@
 #define __TASK_MANAGE_H__
 
 #include "que.h"
+#include "eventflag.h"
 #include "kernel_define.h"
 #include "kernel_config.h"
 #include <stdint.h>
@@ -42,7 +43,11 @@ typedef struct {
     SIZE        stksz;          // stack size
     VP          stk;            // stack top address
     
-    que_t       *p_root_que;    // Not Null if TA_PRI specified
+    que_t       *p_root_que;    // Not NULL if TA_PRI specified
+    
+    union {
+        evtflg_info_t flg_info; // eventflag info
+    } winfo;
 } tcb_t;
 
 /*--------------------------------------------------------------------------------------*/
@@ -97,6 +102,8 @@ typedef struct {
  */
 #define TA_TFIFO        (0x01)
 #define TA_TPRI         (0x02)
+#define TA_WSIG         (0x04)      // enable single que wait
+#define TA_WMUL         (0x08)      // enable multi que wait
 
 
 /*--------------------------------------------------------------------------------------*/

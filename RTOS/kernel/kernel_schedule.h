@@ -27,6 +27,7 @@
 #define kernel_schedule_task()  do { \
                                     p_knl_top_tcb = get_top_ready_que(); \
                                     dispatch_request(); \
+                                    isb(); \
                                 } while (0)
 
 
