@@ -13,15 +13,23 @@
 #include "task_manage.h"
 #include "task_sync.h"
 #include "cyc_hdlr.h"
+#include "eventflag.h"
+#include <kernel_define.h>
 #include <stdio.h>
 
-static void test_cyc(void)
+static void test1_func(void)
 {
-    uint32_t set_val;
+    FLGPTN flgptn;
+    wai_flg(0, 0xA0A0, EVENTFLAG_MODE_ANDW, &flgptn, 3000);
+    while (1);
+}
 
-    set_val = port_drv_get_pin_lvl(PORTB4); 
-    set_val = (~set_val) & 1;
-    port_drv_set_pin_lvl(PORTB4, set_val);
+static void test2_func(void)
+{
+    set_flg(0, 0xA0);
+    set_flg(0, 0xA000);
+    slp_tsk(TMO_FEVR);
+    while (1);
 }
 
 /*--------------------------------------------------------------------------------------*/
@@ -29,17 +37,31 @@ static void test_cyc(void)
  */
 void app_main(void)
 {
-    T_CCYC ccyc;
-    ccyc.cycatr = TA_HLANG|TA_STA;
-    ccyc.exinf = NULL;
-    ccyc.cychdr = test_cyc;
-    ccyc.cyctime = 1000;
-    ccyc.cycphs = 0;
-    port_drv_set_pin_func(PORTB4, PORTB4_OUTPUT, PORT_LVL_HIGH, 0, 0, 0);
-
-    if (cre_cyc(0, &ccyc) < 0) {
+    T_CFLG cflg;
+    cflg.flgatr = TA_CLR;
+    cflg.iflgptn = 0;
+    if (cre_flg(0, &cflg)) {
         while (1);
     }
+    
+    T_CTSK init_ctsk;
+    init_ctsk.tskatr = TA_HLANG|TA_ACT;
+    init_ctsk.exinf = NULL;
+    init_ctsk.task = test1_func;
+    init_ctsk.itskpri = 1;
+    init_ctsk.stksz = 256;
+    init_ctsk.stk = NULL;
+    if (cre_tsk(2, &init_ctsk)) {
+        while (1);
+    }
+
+    T_CTSK test2;
+    test2.tskatr = TA_HLANG|TA_ACT;
+    test2.exinf = NULL;
+    test2.task = test2_func;
+    test2.itskpri = 2;
+    test2.stksz = 256;
+    test2.stk = NULL;
     
     // end app main
     slp_tsk(TMO_FEVR);
