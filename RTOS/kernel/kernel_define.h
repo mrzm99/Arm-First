@@ -35,6 +35,8 @@
 #define ER_UINT uint32_t
 #define ID      int32_t
 #define RELTIM  uint32_t
+#define FLGPTN  uint32_t
+#define MODE    uint32_t
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  start address

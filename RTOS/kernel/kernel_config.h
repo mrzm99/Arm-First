@@ -29,5 +29,10 @@
 /*! @brief  Semaphore config 
  */
 #define SEM_NUM             (5)                 // Semaphore NUM
-                                                
+
+/*--------------------------------------------------------------------------------------*/
+/*! @brief  Eventflag config
+ */
+#define EVTFLG_NUM          (5)                 // Eventflag NUM
+
 #endif
