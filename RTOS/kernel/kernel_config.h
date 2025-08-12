@@ -35,4 +35,9 @@
  */
 #define EVTFLG_NUM          (5)                 // Eventflag NUM
 
+/*--------------------------------------------------------------------------------------*/
+/*! @brief  Fix Memory Pool config
+ */
+#define MPF_NUM             (5)                 // Fix Memory Pool NUM
+ 
 #endif
