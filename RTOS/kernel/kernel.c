@@ -15,6 +15,8 @@
 #include "task_manage.h"
 #include "kernel_schedule.h"
 #include "cyc_hdlr.h"
+#include "eventflag.h"
+#include "mem_poolf.h"
 #include "semaphore.h"
 #include <kernel_config.h>
 #include <stdio.h>
@@ -41,6 +43,7 @@ void kernel_init(void)
     kernel_cyc_init();
     kernel_sem_init();
     kernel_flg_init();
+    kernel_mempoolf_init();
     pendsv_init();
     systick_init();
     mem_init();
