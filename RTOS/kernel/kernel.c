@@ -60,7 +60,7 @@ void kernel_init(void)
     init_ctsk.exinf = NULL;
     init_ctsk.task = kernel_init_task;
     init_ctsk.itskpri = TSK_PRI_MIN;
-    init_ctsk.stksz = 64;
+    init_ctsk.stksz = 128;
     init_ctsk.stk = NULL;
     if (cre_tsk(0, &init_ctsk)) {
         while (1);
@@ -72,21 +72,11 @@ void kernel_init(void)
     app_ctsk.exinf = NULL;
     app_ctsk.task = app_main;
     app_ctsk.itskpri = TSK_PRI_MAX;
-    app_ctsk.stksz = 1024;
+    app_ctsk.stksz = 512;
     app_ctsk.stk = NULL;
     if (cre_tsk(1, &app_ctsk)) {
         while (1);
     }
-
-    // test
-    uint8_t *p = mem_alloc(16);
-    p = mem_alloc(16);
-    p = mem_alloc(16);
-    p = mem_alloc(16);
-    p = mem_alloc(16);
-    p = mem_alloc(16);
-    p = mem_alloc(16);
-    p = mem_alloc(16);
 
     // enable interrupt
     enable_int(); 
