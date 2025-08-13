@@ -40,4 +40,9 @@
  */
 #define MPF_NUM             (5)                 // Fix Memory Pool NUM
  
+/*--------------------------------------------------------------------------------------*/
+/*! @brief  MailBox config
+ */
+#define MBX_NUM             (3)                 // MailBox NUM
+
 #endif
