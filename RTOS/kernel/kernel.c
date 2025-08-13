@@ -17,6 +17,7 @@
 #include "cyc_hdlr.h"
 #include "eventflag.h"
 #include "mem_poolf.h"
+#include "mailbox.h"
 #include "semaphore.h"
 #include <kernel_config.h>
 #include <stdio.h>
@@ -44,6 +45,7 @@ void kernel_init(void)
     kernel_sem_init();
     kernel_flg_init();
     kernel_mempoolf_init();
+    kernel_mbx_init();
     pendsv_init();
     systick_init();
     mem_init();
@@ -75,6 +77,16 @@ void kernel_init(void)
     if (cre_tsk(1, &app_ctsk)) {
         while (1);
     }
+
+    // test
+    uint8_t *p = mem_alloc(16);
+    p = mem_alloc(16);
+    p = mem_alloc(16);
+    p = mem_alloc(16);
+    p = mem_alloc(16);
+    p = mem_alloc(16);
+    p = mem_alloc(16);
+    p = mem_alloc(16);
 
     // enable interrupt
     enable_int(); 
