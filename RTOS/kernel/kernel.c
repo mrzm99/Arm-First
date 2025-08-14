@@ -19,7 +19,8 @@
 #include "mem_poolf.h"
 #include "mailbox.h"
 #include "semaphore.h"
-#include <kernel_config.h>
+#include "msgbuff.h" 
+#include "kernel_config.h"
 #include <stdio.h>
 
 extern void app_main(void);
@@ -46,6 +47,7 @@ void kernel_init(void)
     kernel_flg_init();
     kernel_mempoolf_init();
     kernel_mbx_init();
+    kernel_mbf_init();
     pendsv_init();
     systick_init();
     mem_init();

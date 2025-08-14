@@ -45,4 +45,9 @@
  */
 #define MBX_NUM             (3)                 // MailBox NUM
 
+/*--------------------------------------------------------------------------------------*/
+/*! @brief  Message Buffer config
+ */
+#define MBF_NUM             (3)                 // Message Buffer NUM
+
 #endif
