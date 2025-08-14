@@ -15,11 +15,11 @@
 #include "cyc_hdlr.h"
 #include "mailbox.h"
 #include "mem_alloc.h"
+#include "msgbuff.h"
 #include <stdio.h>
 
 typedef struct {
-    T_MSG   msghd;
-    UW      lvl;
+    uint32_t lvl;
 } msg_t;
 
 static void test_cyc(void)
@@ -33,29 +33,23 @@ static void test_cyc(void)
 
 static void test1(void)
 {
-    uint32_t lvl;
-    msg_t *msg;
-
+    msg_t msg = { .lvl = 1 };
+    
     while (1) {
-        if (rcv_mbx(0, (T_MSG**)&msg, TMO_FEVR) == E_OK) {
-            lvl = msg->lvl;
-            port_drv_set_pin_lvl(PORTB4, lvl);
-//            mem_free(msg);
-        }  
-    } 
+        msg.lvl = ~msg.lvl & 1;
+        snd_mbf(0, (VP)&msg, sizeof(msg), TMO_FEVR);
+        dly_tsk(500);
+    }
 }
 
 static void test2(void)
 {
-    uint32_t lvl = 0;
-    msg_t *msg;
+    msg_t msg;
 
     while (1) {
-        msg = (msg_t*)mem_alloc(sizeof(msg_t)); 
-        msg->lvl = lvl;
-        lvl = ~lvl & 1;
-        snd_mbx(0, (T_MSG*)msg);
-        dly_tsk(1000);
+        if (rcv_mbf(0, (VP)&msg, TMO_FEVR) > 0) {
+            port_drv_set_pin_lvl(PORTB4, msg.lvl);
+        }
     }
 }
 
@@ -86,11 +80,15 @@ void app_main(void)
         while (1);
     }
 
-    T_CMBX cmbx;
-    cmbx.mbxatr = TA_TFIFO;
-    if (cre_mbx(0, &cmbx)) {
+    T_CMBF cmbf;
+    cmbf.mbfatr = TA_TFIFO;
+    cmbf.maxmsz = sizeof(msg_t);
+    cmbf.mbfsz = 64;
+    cmbf.mbf = NULL;
+    if (cre_mbf(0, &cmbf) != E_OK) {
         while (1);
     }
+
    
     // end app main
     slp_tsk(TMO_FEVR);
