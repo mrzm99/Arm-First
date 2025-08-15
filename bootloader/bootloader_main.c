@@ -87,7 +87,7 @@ static void clock_init(void)
 /*! @brief  Initialize system
  */
 void system_init(void)
-{   
+{
     // init section
     section_init();
 
@@ -100,9 +100,6 @@ void system_init(void)
 
     // init clock
     clock_init();
-
-    // init vecter table on RAM
-    init_vecttbl();
 
     // jump to kernel 
     kernel_init();

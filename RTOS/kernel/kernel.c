@@ -21,6 +21,7 @@
 #include "semaphore.h"
 #include "msgbuff.h" 
 #include "kernel_config.h"
+#include "int_hdlr.h"
 #include <stdio.h>
 
 extern void app_main(void);
@@ -41,6 +42,7 @@ static void kernel_init_task(void)
 void kernel_init(void)
 {
     // kernel module init
+    kernel_int_init();
     kernel_task_init();
     kernel_cyc_init();
     kernel_sem_init();

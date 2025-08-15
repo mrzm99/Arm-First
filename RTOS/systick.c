@@ -54,7 +54,7 @@ int32_t systick_start(uint32_t clk_src, uint32_t clk_MHz)
     set_word(STK_LOAD, cnt_val);
 
     // set SysTick exception handler
-    set_handler(INTHDLR_NO_SYSTICK, systick_handler);
+    int_drv_set_handler(INTHDLR_NO_SYSTICK, systick_handler);
 
     // set SysTick exception priority
     set_val = get_word(SHPR3);
