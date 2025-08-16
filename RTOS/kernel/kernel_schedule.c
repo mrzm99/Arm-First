@@ -38,7 +38,7 @@ void pendsv_init(void)
     uint32_t set_val;
 
     // set PendSV exception handler
-    set_handler(INTHDLR_NO_PENDSV, pendsv_handler);
+    int_drv_set_handler(INTHDLR_NO_PENDSV, pendsv_handler);
 
     // set PendSV exception priority
     set_val = get_word(SHPR3);
