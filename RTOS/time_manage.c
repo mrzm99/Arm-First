@@ -41,7 +41,7 @@ static void knl_sig_tim(void)
             p_tcb->lefttmo--;         
         } else {
             // get rid of ques like sem que, evt que etc
-
+            deque(&p_tcb->ready_que);
             // deque time que
             p_elm = p_elm->p_prev;
             deque(&p_tcb->tim_que);
