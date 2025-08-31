@@ -11,12 +11,11 @@
 #define __SYSTEM_DEFINE_H__
 
 /*--------------------------------------------------------------------------------------*/
-/*! @brief Clock frequency
+/*! @brief Clock frequency  [MHz]
  */
-// Sytem clock 160MHz
-#define SYSTEM_CLOCK_FREQ   (160)
-// AHB clock 160MHZ
-#define AHB_CLOCK_FREQ      (160)
+#define SYSTEM_CLOCK_FREQ   (160)   //!< SYSMTE clock
+#define AHB_CLOCK_FREQ      (160)   //!< AHB clock
+#define APB1_CLOCK_FREQ     (40)    //!< APB1 clock
 
 
 /*--------------------------------------------------------------------------------------*/

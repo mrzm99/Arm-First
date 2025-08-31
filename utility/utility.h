@@ -49,7 +49,7 @@ extern uint32_t get_int_stat(void);
 #define critical_section_end()      if (!__primask__) { enable_int(); }}
 
 /*--------------------------------------------------------------------------------------*/
-/*! @bjief field operation 
+/*! @brief field operation 
  */
 #define set_field(type, reg, mask, val)     reg=((type)((reg)&(~(mask))))|((type)((val)<<get_sft_num(mask)))
 #define clr_field(type, reg, mask)          (reg=((type)((reg)&(~(mask))))) 
@@ -87,4 +87,3 @@ extern uint32_t get_int_stat(void);
                                             ((mask)&(1U<<29))?29:\
                                             ((mask)&(1U<<30))?30:\
                                             ((mask)&(1U<<31))?31:31)
-

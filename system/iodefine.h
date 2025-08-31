@@ -132,4 +132,26 @@
 #define GPIOx_AFRL              (0x20U)
 #define GPIOx_AFRH              (0x24U)
 
+/*--------------------------------------------------------------------------------------*/
+/*! @brief USART
+ */
+#define USART_OFS_SR            (0x00)
+#define USART_OFS_DR            (0x04)
+#define USART_OFS_BRR           (0x08)
+#define USART_OFS_CR1           (0x0C)
+#define USART_OFS_CR2           (0x10)
+#define USART_OFS_CR3           (0x14)
+#define USART_OFS_GTPR          (0x18)
+
+#define USART2_BASE             (0x40004400)
+#define USART2_SR               (USART2_BASE+USART_OFS_SR)
+#define USART2_DR               (USART2_BASE+USART_OFS_DR)
+#define USART2_BRR              (USART2_BASE+USART_OFS_BRR)
+#define USART2_CR1              (USART2_BASE+USART_OFS_CR1)
+#define USART2_CR2              (USART2_BASE+USART_OFS_CR2)
+#define USART2_CR3              (USART2_BASE+USART_OFS_CR3)
+#define USART2_GTPR             (USART2_BASE+USART_OFS_GTPR)
+
+
+
 #endif
