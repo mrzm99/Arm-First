@@ -67,7 +67,9 @@
 #define get_func(f)         ((f)&(0xFF))
 
 #define PORTA2_OUTPUT       ((PORT_OUTPUT<<8)|(0x00))
+#define PORTA2_USART2_TX    ((PORT_FUNC<<8)|(7))
 #define PORTA3_OUTPUT       ((PORT_OUTPUT<<8)|(0x00))
+#define PORTA3_USART2_RX    ((PORT_FUNC<<8)|(7))
 
 #define PORTA15_INPUT       ((PORT_INPUT<<8)|(0x00))
 #define PORTA15_OUTPUT      ((PORT_OUTPUT<<8)|(0x00))
@@ -94,6 +96,5 @@ int32_t port_drv_set_pin_func(uint32_t port_no, uint32_t mode, uint32_t init_val
 int32_t port_drv_set_pin_lvl(uint32_t port_no, uint32_t lvl);
 int32_t port_drv_get_pin_lvl(uint32_t port_no);
 int32_t port_drv_set_pin_lvl_no_rmw(uint32_t port_no, uint32_t lvl);
-
 
 #endif

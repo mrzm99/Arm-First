@@ -13,6 +13,23 @@
 #include <stdint.h>
 
 /*--------------------------------------------------------------------------------------*/
+/*! @brief  Interrupt Register Bit No 
+ */
+#define INTREG_B0           (0)
+#define INTREG_B1           (1)
+#define INTREG_B2           (2)
+#define INTREG_B3           (3)
+#define INTREG_B4           (4)
+#define INTREG_B5           (5)
+#define INTREG_B6           (6)
+#define INTREG_B7           (7)
+#define INTREG_B8           (8)
+#define INTREG_B9           (9)
+#define INTREG_B10          (10)
+// ...
+#define INTREG_B31          (31)
+
+/*--------------------------------------------------------------------------------------*/
 /*! @brief  Interrupt Handler Number 
  */
 #define INTHDLR_NO_STACK    (  0)
@@ -20,12 +37,13 @@
 #define INTHDLR_NO_SVC      ( 11)
 #define INTHDLR_NO_PENDSV   ( 14)
 #define INTHDLR_NO_SYSTICK  ( 15)
+#define INTHDLR_NO_USART2   ( 54) 
 #define INTHDLR_NO_MAX      (255)
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  Interrupt Priority Number   
  */
-#define INTPRI_NO_HOGE      (0)
+#define INTPRI_NO_USART2    ( 38)
 #define INTPRI_NO_MAX       (240)
 
 /*--------------------------------------------------------------------------------------*/
@@ -48,9 +66,7 @@
 #define INTENA_OFS_ISER7        (7)
 #define INTENA_OFS_MAX          (8)
 
-#define INTENA_BNO_HOGE         (0)
-
-#define INTENA_NO_HOGE          ((INTENA_OFS_ISER0<<8)|(INTENA_NO_HOGE))
+#define INTENA_NO_USART2        ((INTENA_OFS_ISER1<<8)|(INTREG_B6))
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  Interrupt Disable Number 

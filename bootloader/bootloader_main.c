@@ -79,8 +79,6 @@ static void clock_init(void)
     set_word(RCC + RCC_APB2ENR, 0x00075833);
     // RTC clock enable
     set_word(RCC + RCC_BDCR, 0x00008000);
-
-
 }
 
 /*--------------------------------------------------------------------------------------*/
@@ -100,6 +98,11 @@ void system_init(void)
 
     // init clock
     clock_init();
+
+    // enable module
+    uint32_t set_val = get_word(RCC + RCC_APB1ENR);
+    set_field(uint32_t, set_val, 1<<17, 1);
+    set_word(RCC + RCC_APB1ENR, set_val);
 
     // jump to kernel 
     kernel_init();
