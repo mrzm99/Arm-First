@@ -102,6 +102,7 @@ void system_init(void)
     // enable module
     uint32_t set_val = get_word(RCC + RCC_APB1ENR);
     set_field(uint32_t, set_val, 1<<17, 1);
+    set_field(uint32_t, set_val, 1<<21, 1);
     set_word(RCC + RCC_APB1ENR, set_val);
 
     // jump to kernel 

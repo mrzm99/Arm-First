@@ -152,6 +152,30 @@
 #define USART2_CR3              (USART2_BASE+USART_OFS_CR3)
 #define USART2_GTPR             (USART2_BASE+USART_OFS_GTPR)
 
+/*--------------------------------------------------------------------------------------*/
+/*! @brief I2C
+ */
+#define I2C_OFS_CR1             (0x00)
+#define I2C_OFS_CR2             (0x04)
+#define I2C_OFS_OAR1            (0x08)
+#define I2C_OFS_OAR2            (0x0C)
+#define I2C_OFS_DR              (0x10)
+#define I2C_OFS_SR1             (0x14)
+#define I2C_OFS_SR2             (0x18)
+#define I2C_OFS_CCR             (0x1C)
+#define I2C_OFS_TRISE           (0x20)
+#define I2C_OFS_FLTR            (0x24)
 
+#define I2C1_BASE               (0x40005400)
+#define I2C1_CR1                (I2C1_BASE+I2C_OFS_CR1)
+#define I2C1_CR2                (I2C1_BASE+I2C_OFS_CR2)
+#define I2C1_OAR1               (I2C1_BASE+I2C_OFS_OAR1)
+#define I2C1_OAR2               (I2C1_BASE+I2C_OFS_OAR2)
+#define I2C1_DR                 (I2C1_BASE+I2C_OFS_DR)
+#define I2C1_SR1                (I2C1_BASE+I2C_OFS_SR1)
+#define I2C1_SR2                (I2C1_BASE+I2C_OFS_SR2)
+#define I2C1_CCR                (I2C1_BASE+I2C_OFS_CCR)
+#define I2C1_TRISE              (I2C1_BASE+I2C_OFS_TRISE)
+#define I2C1_FLTR               (I2C1_BASE+I2C_OFS_FLTR)
 
 #endif

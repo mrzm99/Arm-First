@@ -32,19 +32,23 @@
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  Interrupt Handler Number 
  */
-#define INTHDLR_NO_STACK    (  0)
-#define INTHDLR_NO_RESET    (  1)
-#define INTHDLR_NO_SVC      ( 11)
-#define INTHDLR_NO_PENDSV   ( 14)
-#define INTHDLR_NO_SYSTICK  ( 15)
-#define INTHDLR_NO_USART2   ( 54) 
-#define INTHDLR_NO_MAX      (255)
+#define INTHDLR_NO_STACK        (  0)
+#define INTHDLR_NO_RESET        (  1)
+#define INTHDLR_NO_SVC          ( 11)
+#define INTHDLR_NO_PENDSV       ( 14)
+#define INTHDLR_NO_SYSTICK      ( 15)
+#define INTHDLR_NO_I2C1_EV      ( 47)
+#define INTHDLR_NO_I2C1_ER      ( 48)
+#define INTHDLR_NO_USART2       ( 54) 
+#define INTHDLR_NO_MAX          (255)
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  Interrupt Priority Number   
  */
-#define INTPRI_NO_USART2    ( 38)
-#define INTPRI_NO_MAX       (240)
+#define INTPRI_NO_I2C1_EV       ( 31)
+#define INTPRI_NO_I2C1_ER       ( 32)
+#define INTPRI_NO_USART2        ( 38)
+#define INTPRI_NO_MAX           (240)
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief  Interrupt Priority
@@ -66,6 +70,8 @@
 #define INTENA_OFS_ISER7        (7)
 #define INTENA_OFS_MAX          (8)
 
+#define INTENA_NO_I2C1_EV       ((INTENA_OFS_ISER0<<8)|(INTREG_B31))
+#define INTENA_NO_I2C1_ER       ((INTENA_OFS_ISER0<<8)|(INTREG_B0))
 #define INTENA_NO_USART2        ((INTENA_OFS_ISER1<<8)|(INTREG_B6))
 
 /*--------------------------------------------------------------------------------------*/
