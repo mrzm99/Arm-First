@@ -71,7 +71,7 @@
 #define INTENA_OFS_MAX          (8)
 
 #define INTENA_NO_I2C1_EV       ((INTENA_OFS_ISER0<<8)|(INTREG_B31))
-#define INTENA_NO_I2C1_ER       ((INTENA_OFS_ISER0<<8)|(INTREG_B0))
+#define INTENA_NO_I2C1_ER       ((INTENA_OFS_ISER1<<8)|(INTREG_B0))
 #define INTENA_NO_USART2        ((INTENA_OFS_ISER1<<8)|(INTREG_B6))
 
 /*--------------------------------------------------------------------------------------*/
