@@ -26,6 +26,7 @@
 #define INT_PRI_MIN                         (255)
 #define INT_PRI_SYSTICK                     (1<<INT_PRI_SYSTEM_EXCEPTION_SFT_NUM) 
 #define INT_PRI_PENDSV                      (10<<INT_PRI_SYSTEM_EXCEPTION_SFT_NUM)
+#define INT_PRI_I2C_CH1                     (2<<INT_PRI_SYSTEM_EXCEPTION_SFT_NUM)
 
 
 #endif
