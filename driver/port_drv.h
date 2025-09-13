@@ -81,7 +81,9 @@
 #define PORTB4_OUTPUT       ((PORT_OUTPUT<<8)|(0x00))
 #define PORTB4_ANALOG       ((PORT_ANALOG<<8)|(0x00))
 
+#define PORTB6_OUTPUT       ((PORT_OUTPUT<<8)|(0x00))
 #define PORTB6_I2C1_SCL     ((PORT_FUNC<<8)|(4))
+#define PORTB7_OUTPUT       ((PORT_OUTPUT<<8)|(0x00))
 #define PORTB7_I2C1_SDA     ((PORT_FUNC<<8)|(4))
 
 /*--------------------------------------------------------------------------------------*/

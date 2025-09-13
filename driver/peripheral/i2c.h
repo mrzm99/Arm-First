@@ -62,6 +62,7 @@ int32_t i2c_open(uint32_t ch, uint32_t pri, i2c_send_callback send_callback, i2c
 int32_t i2c_send(uint32_t ch, uint8_t slave_addr, uint8_t reg_addr, uint8_t *p_data, uint32_t send_num);
 int32_t i2c_recv(uint32_t ch, uint8_t slave_addr, uint8_t reg_addr, uint8_t *p_data, uint32_t recv_num);
 int32_t i2c_close(uint32_t ch);
+void i2c_recovery(void);
 
 #endif
 
