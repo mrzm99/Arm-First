@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------------------------*/
-/*! 
- *  @file   i2c.c 
+/*!
+ *  @file   i2c.c
  *  @date   2025.xx.xx
  *  @author mrzm99
  *  @brief
@@ -91,7 +91,7 @@ typedef struct {
     uint32_t ccr;
     uint32_t trise;
     uint32_t fltr;
-} i2c_reg_t; 
+} i2c_reg_t;
 
 static const i2c_reg_t i2c_reg_info[I2C_CH_MAX] = {
     // ch1
@@ -183,7 +183,7 @@ typedef void (*state_handler)(uint32_t ch, i2c_ctrl_blck_t *this, const i2c_reg_
 static const state_handler handler_table[I2C_ST_HANDLER_NUM] = {
     idle_hdr,
     wait_start_cond_hdr,
-    wait_send_slave_addr_hdr, 
+    wait_send_slave_addr_hdr,
     wait_send_reg_addr_hdr,
     wait_send_data_hdr,
     wait_stop_condition_hdr,
@@ -205,11 +205,12 @@ static void idle_hdr(uint32_t ch, i2c_ctrl_blck_t *this, const i2c_reg_t *p_reg_
  */
 static void wait_start_cond_hdr(uint32_t ch, i2c_ctrl_blck_t *this, const i2c_reg_t *p_reg_info)
 {
-    // flag clear 
+    // flag clear
     uint16_t set_val = get_hword(p_reg_info->sr1);
+    uint16_t sr2 = get_hword(p_reg_info->sr2);
 
     // send slave address
-    this->slv_addr = this->slv_addr & ~1;
+    this->slv_addr = this->slv_addr;
     set_byte(p_reg_info->dr, this->slv_addr);
 
     // change state to "wait send slave addr"
@@ -239,8 +240,9 @@ static void wait_send_reg_addr_hdr(uint32_t ch, i2c_ctrl_blck_t *this, const i2c
 {
     // flag clear
     uint16_t set_val = get_hword(p_reg_info->sr1);
+    uint16_t sr2_val = get_hword(p_reg_info->sr2);
 
-    // send mode 
+    // send mode
     if (this->mode == I2C_MODE_SEND) {
         // send data
         set_byte(p_reg_info->dr, *this->p_sdata);
@@ -250,7 +252,7 @@ static void wait_send_reg_addr_hdr(uint32_t ch, i2c_ctrl_blck_t *this, const i2c
         this->state = I2C_ST_WAIT_SEND_DATA;
     // recv mode
     } else {
-        //  
+        //
         get_byte(p_reg_info->dr);
         // issue restart condition
         ISSUSE_RESTART_COND(ch);
@@ -266,8 +268,8 @@ static void wait_send_data_hdr(uint32_t ch, i2c_ctrl_blck_t *this, const i2c_reg
 {
     // flag clear
     uint16_t set_val = get_hword(p_reg_info->sr1);
+    uint16_t sr2 = get_hword(p_reg_info->sr2);
 
-    // if sendnum == 0
     if (this->send_num == 0) {
         // flg clear
         get_byte(p_reg_info->dr);
@@ -279,12 +281,16 @@ static void wait_send_data_hdr(uint32_t ch, i2c_ctrl_blck_t *this, const i2c_reg
         if (this->send_callback != NULL) {
             this->send_callback(this->p_callback_par);
         }
+    set_val = get_hword(p_reg_info->cr1);
+    set_field(uint16_t, set_val, 1, 0);
+    set_hword(p_reg_info->cr1, set_val);
+
     } else {
         // send data
         set_byte(p_reg_info->dr, *this->p_sdata);
         this->send_num--;
         this->p_sdata++;
-    } 
+    }
 }
 
 /*--------------------------------------------------------------------------------------*/
@@ -305,24 +311,25 @@ static void wait_recv_data_hdr(uint32_t ch, i2c_ctrl_blck_t *this, const i2c_reg
     uint16_t sr2_val = get_hword(p_reg_info->sr2);
 
     // read data
+    //while (!(get_hword(p_reg_info->sr1) & (1<<6)));
     *this->p_rdata = get_byte(p_reg_info->dr);
     this->recv_num--;
     this->p_rdata++;
 
-    // send NACK at the next recv 
+    // send NACK at the next recv
     if (this->recv_num == 1) {
         SEND_NACK(ch);
     } else {
         SEND_AKC(ch);
     }
 
-    // issue stop condition 
+    // issue stop condition
     if (this->recv_num == 0) {
         ISSUE_STOP_COND(ch);
         this->state = I2C_ST_WAIT_STOP_COND;
         // callback
         if (this->recv_callback != NULL) {
-            this->recv_callback(this->p_callback_par);         
+            this->recv_callback(this->p_callback_par);
         }
     }
 }
@@ -334,6 +341,7 @@ static void wait_restart_cond_hdr(uint32_t ch, i2c_ctrl_blck_t *this, const i2c_
 {
     // flag clear
     uint16_t set_val = get_hword(p_reg_info->sr1);
+    uint16_t sr2 = get_hword(p_reg_info->sr2);
 
     // send slave address
     this->slv_addr = this->slv_addr | 1;
@@ -346,7 +354,7 @@ static void wait_restart_cond_hdr(uint32_t ch, i2c_ctrl_blck_t *this, const i2c_
         SEND_AKC(ch);
     }
 
-    // change state to "wait send slave addr"
+    // change state to ""
     this->state = I2C_ST_WAIT_RECV_DATA;
 }
 
@@ -367,7 +375,8 @@ static void common_ev_inthdler(uint32_t ch)
     i2c_ctrl_blck_t *this = get_myself(ch);
     const i2c_reg_t *p_reg_info = &i2c_reg_info[ch];
 
-   handler_table[this->state](ch, this, p_reg_info); 
+    for (int i = 0; i < (1<<15); i++);
+   handler_table[this->state](ch, this, p_reg_info);
 }
 
 /*--------------------------------------------------------------------------------------*/
@@ -423,7 +432,7 @@ void i2c_init(void)
 }
 
 /*--------------------------------------------------------------------------------------*/
-/*! @brief config 
+/*! @brief config
  */
 int32_t i2c_config(uint32_t ch, i2c_peri_config_t *p_config)
 {
@@ -438,7 +447,7 @@ int32_t i2c_config(uint32_t ch, i2c_peri_config_t *p_config)
         return ERR_PAR;
     }
 
-    // Todo: check config data  
+    // Todo: check config data
 
     // start critical section
     critical_section_start();
@@ -447,7 +456,7 @@ int32_t i2c_config(uint32_t ch, i2c_peri_config_t *p_config)
     p_reg_info = &i2c_reg_info[ch];
 
     // Todo: disalbe i2c
-    
+
     // set register
     set_reg(p_reg_info, p_config);
 
@@ -471,7 +480,7 @@ int32_t i2c_config(uint32_t ch, i2c_peri_config_t *p_config)
 int32_t i2c_open(uint32_t ch, uint32_t pri, i2c_send_callback send_callback, i2c_recv_callback recv_callback, void *p_callback_par)
 {
     i2c_ctrl_blck_t *this;
-    const i2c_reg_t *p_reg_info; 
+    const i2c_reg_t *p_reg_info;
     uint16_t set_val;
 
     // check parameter
@@ -500,14 +509,14 @@ int32_t i2c_open(uint32_t ch, uint32_t pri, i2c_send_callback send_callback, i2c
     int_drv_set_pri(peri_info[ch].inthdr_info[I2C_INTNO_ER].pri_no, pri);
     int_drv_set_pri(peri_info[ch].inthdr_info[I2C_INTNO_EV].pri_no, pri);
 
-    // enable interrupt of int driver 
+    // enable interrupt of int driver
     int_drv_ena_int(peri_info[ch].inthdr_info[I2C_INTNO_ER].ena_no);
     int_drv_ena_int(peri_info[ch].inthdr_info[I2C_INTNO_EV].ena_no);
 
     // enable interrupt on i2c module
     p_reg_info = &i2c_reg_info[ch];
     set_val = get_hword(p_reg_info->cr2);
-    set_field(uint16_t, set_val, 3<<8, 3);
+    set_field(uint16_t, set_val, 7<<8, 3);
     set_hword(p_reg_info->cr2, set_val);
 
     // end critical section
@@ -542,7 +551,7 @@ int32_t i2c_send(uint32_t ch, uint8_t slave_addr, uint8_t reg_addr, uint8_t *p_d
     // get reg info
     p_reg_info = &i2c_reg_info[ch];
 
-    // get control block 
+    // get control block
     this = get_myself(ch);
 
     // save send data info
@@ -594,7 +603,7 @@ int32_t i2c_recv(uint32_t ch, uint8_t slave_addr, uint8_t reg_addr, uint8_t *p_d
     // start critical section
     critical_section_start();
 
-    // get reg info 
+    // get reg info
     p_reg_info = &i2c_reg_info[ch];
 
     // get control block
@@ -617,7 +626,7 @@ int32_t i2c_recv(uint32_t ch, uint8_t slave_addr, uint8_t reg_addr, uint8_t *p_d
     // change state
     this->state = I2C_ST_WAIT_START_COND;
 
-    // issue start condition 
+    // issue start condition
     ISSUE_START_COND(ch);
 
     // end critical section
@@ -641,14 +650,17 @@ int32_t i2c_close(uint32_t ch)
  */
 void i2c_recovery(void)
 {
-    port_drv_set_pin_func(PORTB6, PORTB6_OUTPUT , PORT_LVL_HIGH, 0, 0, 0);
+    port_drv_set_pin_func(PORTB6, PORTB6_OUTPUT , PORT_LVL_LOW, 0, 0, 0);
     port_drv_set_pin_func(PORTB7, PORTB7_OUTPUT , PORT_LVL_HIGH, 0, 0, 0);
-    
+
     for (int i = 0; i < 9; i++) {
         port_drv_set_pin_lvl(PORTB6, PORT_LVL_LOW);
-        for (int i=0; i<1000000; i++); 
+        for (int i=0; i<1000000; i++);
         port_drv_set_pin_lvl(PORTB6, PORT_LVL_HIGH);
-        for (int i=0; i<1000000; i++); 
+        for (int i=0; i<1000000; i++);
     }
 
+    port_drv_set_pin_func(PORTB7, PORTB7_OUTPUT , PORT_LVL_LOW, 0, 0, 0);
+        for (int i=0; i<1000000; i++);
+    port_drv_set_pin_func(PORTB7, PORTB7_OUTPUT , PORT_LVL_HIGH, 0, 0, 0);
 }
