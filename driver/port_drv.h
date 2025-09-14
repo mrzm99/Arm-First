@@ -50,6 +50,8 @@
 #define PORTA3          ((PORTA<<8)|(BIT3))
 #define PORTA15         ((PORTA<<8)|(BIT15))
 #define PORTB4          ((PORTB<<8)|(BIT4))
+#define PORTB6          ((PORTB<<8)|(BIT6))
+#define PORTB7          ((PORTB<<8)|(BIT7))
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief mode 
@@ -79,6 +81,10 @@
 #define PORTB4_OUTPUT       ((PORT_OUTPUT<<8)|(0x00))
 #define PORTB4_ANALOG       ((PORT_ANALOG<<8)|(0x00))
 
+#define PORTB6_OUTPUT       ((PORT_OUTPUT<<8)|(0x00))
+#define PORTB6_I2C1_SCL     ((PORT_FUNC<<8)|(4))
+#define PORTB7_OUTPUT       ((PORT_OUTPUT<<8)|(0x00))
+#define PORTB7_I2C1_SDA     ((PORT_FUNC<<8)|(4))
 
 /*--------------------------------------------------------------------------------------*/
 /*! @brief lvl
