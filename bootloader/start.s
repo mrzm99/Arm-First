@@ -42,8 +42,7 @@
 /*! @brief  reset handler
  */
     .type reset_handlr, %function
-reset_handlr:
-    ldr     r0, =__estack       @ set stack pointer
+reset_handlr:    ldr     r0, =__estack       @ set stack pointer
     mov     sp, r0
     mov     r0, #0              @ initialize PSR register
     msr     APSR_nzcvq, r0
