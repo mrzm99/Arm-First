@@ -1,6 +1,6 @@
 # 自作RTOS
 Cortex-M4コア上で動作するITRON風(?)の自作RTOS  
-ディスパッチはPendSV割り込みハンドラ内で行う実装となっているので``this各サービスコールはキュー操作の後、PendSV割り込み要求を行う。  
+ディスパッチはPendSV割り込みハンドラ内で行う実装となっているので各サービスコールはキュー操作の後、PendSV割り込み要求を行う。  
 タスクコンテキスト、非タスクコンテキスト問わずサービルコールを呼べるようになっているので注意。（気が向いたら修正 and 変更)  
 ## Develepment Environment 
 統合開発環境：STM32CubeIDE 1.14.0   
@@ -8,6 +8,7 @@ Cortex-M4コア上で動作するITRON風(?)の自作RTOS
 <img src="./doc/micon.JPG" alt="micon" width="300">
 
 ## Application  
+LEDを1秒周期で点滅させる。
 
 ## Device Driver 
 PORT Driver
@@ -53,7 +54,7 @@ void mem_free(void *p_mbk);
 int32_t set_handler(uint32_t exp_no, INT_HDLR hdlr);  
 
 ## ToDo 
-MPU 
+MPU  
 Mutex  
 Console Task  
 Timer driver  
@@ -61,8 +62,3 @@ UART driver
 SPI driver  
 I2C driver  
 SD card driver  
-
-
-
-
-
